@@ -46,7 +46,9 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(3);
 
         Vector3 treePos = transform.position + 1.2f*getForward();
-        Instantiate(treePrefab, treePos, Quaternion.AngleAxis(90, Vector3.left));
+        GameObject tree = Instantiate(treePrefab, treePos, Quaternion.AngleAxis(90, Vector3.left));
+        MeshCollider collider = tree.AddComponent<MeshCollider>();
+        collider.convex = true;
     }
 
     // Start is called before the first frame update
@@ -195,10 +197,12 @@ public class Player : MonoBehaviour
             if (anim.GetBool("isRun"))
             {
                 transform.position += transform.forward * Time.deltaTime * 9f;
+                //rb.AddForce(transform.forward * Time.deltaTime * 30f);
             }
             else 
             {
                 transform.position += transform.forward * Time.deltaTime * 5f;
+                //rb.velocity = (transform.forward * 5f);
             }
         }else if (Input.GetKey("s"))
         {

@@ -5,6 +5,10 @@ https://www.reddit.com/r/Unity3D/comments/1kx1hp/best_way_to_do_fishing_line/
 // cottage model (Grant Abbitt)
 https://www.youtube.com/watch?v=izjz2Hya2QM&list=PLn3ukorJv4vsPA95G7jTHDHixF5FntFm3
 
+// character movement, collisions/physics
+https://stackoverflow.com/questions/60414946/unity-addforce-while-using-moveposition-for-movement
+https://stackoverflow.com/questions/40861293/why-is-my-character-passing-through-the-object-even-though-i-have-configured-box
+
 controls:
 p to plant stuff
 f to fish
@@ -15,3 +19,22 @@ stuff with tools
 - water plants w/ c
 - shovel with v
 - rake with y
+
+
+TODO:
+- add basic cottage interior scene
+  - have a fireplace (particle system)
+  - table, chairs, kitchenware
+  - kitchen
+  - books, bookshelf
+  - bed
+  - desk
+- get first-person camera/view working better
+- get fishing working?
+- get equip object working
+- maybe a basic inventory menu
+- flesh out gardening/planting seeds, growing them? watering them?
+  - watering can -> how to simulate water droplets -> particle system?
+- add trees, sky, clouds, better looking/expanded terrain to main map
+- add another cottage? more buildings. animals?
+- add fps stuff (target practice?)
