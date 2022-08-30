@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,6 +34,9 @@ public class GameManager : MonoBehaviour
         // ideally to be used when switching scenes
         setStatus(newStatus);
         showButtons();
+
+        // TODO: maybe pass another arg to indicate what to do if yes button is pressed?
+        clickYesToEnterCottage();
     }
 
     public void updateStatusTemporarily(int expiryTime, string newStatus)
@@ -55,6 +59,19 @@ public class GameManager : MonoBehaviour
     {
         statusText.text = "";
         hideButtons();
+    }
+
+    void clickYesToEnterCottage()
+    {
+        yesButton.onClick.AddListener(delegate
+        {
+            enterCottage();
+        });
+    }
+
+    void enterCottage()
+    {
+        SceneManager.LoadScene("cottage-interior");
     }
 
     // Start is called before the first frame update
