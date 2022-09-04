@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
-    public GameObject treePrefab;
-
     private Rigidbody rb;
     private Animator anim;
 
-    private string areaInside = ""; // TODO: use an enum?
+    private string areaInside = ""; // TODO: use an enum for specific areas?
+    private GameObject areaInsideObj;
 
     public Vector3 getForward()
     {
@@ -23,32 +21,23 @@ public class Player : MonoBehaviour
         // check if in a zone (e.g. garden or near water for fishing)
         Debug.Log(other);
         areaInside = other.name;
+        areaInsideObj = other.gameObject;
     }
 
     private void OnTriggerExit(Collider other)
     {
         areaInside = "";
+        areaInsideObj = null;
     }
 
     private bool isInGarden()
     {
-        return areaInside.Equals("garden-area");
+        return areaInside.Contains("garden-area");
     }
 
     private bool isNextToWater()
     {
         return areaInside.Equals("WaterProDaytime");
-    }
-
-    IEnumerator plantSeed()
-    {
-        // TODO: just putting a little tree to demonstrate but eventually have a little mound?
-        yield return new WaitForSeconds(3);
-
-        Vector3 treePos = transform.position + 1.2f*getForward();
-        GameObject tree = Instantiate(treePrefab, treePos, Quaternion.AngleAxis(90, Vector3.left));
-        MeshCollider collider = tree.AddComponent<MeshCollider>();
-        collider.convex = true;
     }
 
     // Start is called before the first frame update
@@ -147,7 +136,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (isInGarden())
+        if (isInGarden() && !anim.GetBool("isArmed"))
         {
             // watering plants - TODO: only allow if watering can equipped
             if (Input.GetKeyDown("c"))
@@ -163,7 +152,7 @@ public class Player : MonoBehaviour
             else if (Input.GetKeyDown("p"))
             {
                 anim.SetBool("isPlantingSeeds", true);
-                StartCoroutine(plantSeed());
+                areaInsideObj.GetComponent<GardenManager>().plantTree(getForward());
             }
             else if (Input.GetKeyUp("p"))
             {
@@ -174,6 +163,7 @@ public class Player : MonoBehaviour
             else if (Input.GetKeyDown("v"))
             {
                 anim.SetBool("isShoveling", true);
+                areaInsideObj.GetComponent<GardenManager>().shovel();
             }
             else if (Input.GetKeyUp("v"))
             {
@@ -184,6 +174,7 @@ public class Player : MonoBehaviour
             else if (Input.GetKeyDown("y"))
             {
                 anim.SetBool("isRaking", true);
+                areaInsideObj.GetComponent<GardenManager>().rake();
             }
             else if (Input.GetKeyUp("y"))
             {
@@ -222,6 +213,23 @@ public class Player : MonoBehaviour
         else if (Input.GetKey("d"))
         {
             transform.position += transform.right * Time.deltaTime * 5f;
+        }
+        
+        if (Input.GetKeyDown("j"))
+        {
+            anim.SetTrigger("jump");
+        }
+
+        if (Input.GetKeyDown("u"))
+        {
+            if (anim.GetBool("isArmed"))
+            {
+                anim.SetBool("isArmed", false);
+            }
+            else
+            {
+                anim.SetBool("isArmed", true);
+            }
         }
 
         if (anim.GetBool("isFishing"))

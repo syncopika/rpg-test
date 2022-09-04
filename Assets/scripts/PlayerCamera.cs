@@ -6,9 +6,11 @@ public class PlayerCamera : MonoBehaviour
 {
     public GameObject player;
     public GameObject gameManager;
+    public GameObject rotationBone;
 
     private Vector3 lastPos;
     private bool inFirstPerson;
+    private bool inThirdPersonFront;
 
     // for mouse movement
     private float sensitivity = 100f;
@@ -40,6 +42,8 @@ public class PlayerCamera : MonoBehaviour
     void Start()
     {
         inFirstPerson = false;
+        inThirdPersonFront = false;
+
         Vector3 playerForward = player.GetComponent<Player>().getForward();
         Vector3 newVec = 9f * playerForward;
         newVec.y = -4f;
@@ -56,6 +60,19 @@ public class PlayerCamera : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F1))
         {
             inFirstPerson = !inFirstPerson;
+
+            if(inFirstPerson && inThirdPersonFront)
+            {
+                transform.rotation = player.transform.rotation; // if going from thirdpersonfront back to first person, correct the rotation
+            }
+
+            inThirdPersonFront = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            inThirdPersonFront = !inThirdPersonFront;
+            inFirstPerson = false;
         }
 
         if (Input.GetKey("q") || Input.GetKey("e"))
@@ -67,6 +84,52 @@ public class PlayerCamera : MonoBehaviour
         }
 
         Vector3 playerForward = player.GetComponent<Player>().getForward();
+
+        if (inThirdPersonFront)
+        {
+            transform.rotation = player.transform.rotation * Quaternion.Euler(0, 180f, 0); // rotate 180 deg to face player
+
+            Vector3 newVec = 9f * playerForward;
+            newVec.y = 3f;
+
+            if (lastPos != null)
+            {
+                transform.position = Vector3.Lerp(player.transform.position + newVec, lastPos, 0.6f);
+            }
+            else
+            {
+                transform.position = player.transform.position + newVec;
+            }
+
+            lastPos = transform.position;
+
+        }
+        else if (!inFirstPerson)
+        {
+            transform.rotation = player.transform.rotation;
+
+            Vector3 newVec = 9f * playerForward;
+            newVec.y = -3f;
+
+            if (lastPos != null)
+            {
+                transform.position = Vector3.Lerp(player.transform.position - newVec, lastPos, 0.6f);
+            }
+            else {
+                transform.position = player.transform.position - newVec;
+            }
+
+            lastPos = transform.position;
+
+            //transform.LookAt(characterNeck.transform);
+        }
+
+    }
+
+    private void LateUpdate()
+    {
+        // need to do this stuff in lateupdate because we're rotating a bone in the player's armature
+        // https://forum.unity.com/threads/head-bone-wont-rotate-via-script.442351/
 
         if (inFirstPerson)
         {
@@ -85,16 +148,16 @@ public class PlayerCamera : MonoBehaviour
                 // restrict downward view to 15 degrees
                 rotX = Mathf.Clamp(rotX, -90.0f, 90.0f);
 
-                // TODO: also rotate neck bone so head is rotated in the same way?
-
                 // also rotY - TODO: this doesn't seem to be working atm
                 rotY = Mathf.Clamp(rotY, rotY - 5f, rotY + 5f);
 
                 // use quaternion to get new rotation
                 Quaternion localRotation = Quaternion.Euler(rotX, rotY, 0.0f);
-                transform.rotation = localRotation;
+                transform.rotation = localRotation; // camera rotation
 
-                player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, rotY, 0.0f);
+                rotationBone.transform.rotation = localRotation; // set character torso rotation to match camera
+
+                player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, rotY, 0.0f); // this rotates the whole player about the y axis
             }
 
             if (Input.GetMouseButtonDown(0))
@@ -102,23 +165,5 @@ public class PlayerCamera : MonoBehaviour
                 shootRay();
             }
         }
-        else
-        {
-            transform.rotation = player.transform.rotation;
-
-            Vector3 newVec = 9f * playerForward;
-            newVec.y = -3f;
-
-            if (lastPos != null)
-            {
-                transform.position = Vector3.Lerp(player.transform.position - newVec, lastPos, 0.6f);
-            }
-            else {
-                transform.position = player.transform.position - newVec;
-            }
-
-            lastPos = transform.position;
-        }
-
     }
 }

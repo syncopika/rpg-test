@@ -6,7 +6,7 @@ public class PlayerCamera2 : MonoBehaviour
 {
     public GameObject player;
     public GameObject gameManager;
-    public GameObject neck;
+    public GameObject rotationBone;
 
     private Vector3 lastPos;
     private bool inFirstPerson;
@@ -95,7 +95,7 @@ public class PlayerCamera2 : MonoBehaviour
                 // also rotate neck bone so head is rotated in the same way
                 transform.rotation = localRotation;
 
-                neck.transform.rotation = localRotation;
+                rotationBone.transform.rotation = localRotation;
 
                 player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, rotY, 0.0f);
             }

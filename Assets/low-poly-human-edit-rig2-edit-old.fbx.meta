@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 43d138c35ae5eab49b40e065ae005fff
+guid: d28dc3490d01336488405dd38a1f8a25
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -92,22 +92,21 @@ ModelImporter:
     2100000: No Name
     4300000: Body
     7400000: Jump1
-    7400002: Armature|FiringPose
-    7400004: Armature|Fishing
-    7400006: Armature|FishingIdle
-    7400008: Armature|GetTool
-    7400010: Armature|Idle1
-    7400012: Armature|IdleHold
-    7400014: Armature|Jump1
-    7400016: Armature|PlantingSeeds
-    7400018: Armature|Raking
-    7400020: Armature|Run1
-    7400022: Armature|RunArmed
-    7400024: Armature|Shoveling
-    7400026: Armature|Walk1
-    7400028: Armature|WalkArmed
-    7400030: Armature|WalkSide
-    7400032: Armature|WateringPlants
+    7400002: Armature|Fishing
+    7400004: Armature|FishingIdle
+    7400006: Armature|GetTool
+    7400008: Armature|Idle1
+    7400010: Armature|IdleHold
+    7400012: Armature|Jump1
+    7400014: Armature|PlantingSeeds
+    7400016: Armature|Raking
+    7400018: Armature|Run1
+    7400020: Armature|RunArmed
+    7400022: Armature|Shoveling
+    7400024: Armature|Walk1
+    7400026: Armature|WalkArmed
+    7400028: Armature|WalkSide
+    7400030: Armature|WateringPlants
     9500000: //RootNode
     13700000: Body
   externalObjects: {}
@@ -143,34 +142,6 @@ ModelImporter:
       takeName: Jump1
       firstFrame: 0
       lastFrame: 44
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature|FiringPose
-      takeName: Armature|FiringPose
-      firstFrame: 0
-      lastFrame: 4
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -345,8 +316,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
