@@ -14,9 +14,10 @@ public class PlayerCamera : MonoBehaviour
 
     // for mouse movement
     private float sensitivity = 100f;
-    private float clampY = 25.0f;
     private float rotY = 0.0f;
     private float rotX = 0.0f;
+
+    private Quaternion rotationBoneRotation; // use this to keep track of current rotation to set to (e.g. when aiming in a certain direction) since we manually change the rotation to override changes from animation
 
     void shootRay()
     {
@@ -28,7 +29,7 @@ public class PlayerCamera : MonoBehaviour
             if (hit.collider != null)
             {
                 Debug.Log("ray hit: " + hit.transform);
-                if (hit.transform.name.Contains("cottage"))
+                if (hit.transform.name.ToLower().Contains("door"))
                 {
                     // enter cottage scene
                     gameManager.GetComponent<GameManager>().updateStatusWithButtons("enter cottage?");
@@ -43,6 +44,8 @@ public class PlayerCamera : MonoBehaviour
     {
         inFirstPerson = false;
         inThirdPersonFront = false;
+
+        rotationBoneRotation = Quaternion.identity;
 
         Vector3 playerForward = player.GetComponent<Player>().getForward();
         Vector3 newVec = 9f * playerForward;
@@ -156,8 +159,16 @@ public class PlayerCamera : MonoBehaviour
                 transform.rotation = localRotation; // camera rotation
 
                 rotationBone.transform.rotation = localRotation; // set character torso rotation to match camera
+                rotationBoneRotation = localRotation;
 
                 player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, rotY, 0.0f); // this rotates the whole player about the y axis
+            }
+            else
+            {
+                if (rotationBoneRotation != Quaternion.identity)
+                {
+                    rotationBone.transform.rotation = rotationBoneRotation;
+                }
             }
 
             if (Input.GetMouseButtonDown(0))

@@ -10,6 +10,10 @@ public class Player : MonoBehaviour
     private string areaInside = ""; // TODO: use an enum for specific areas?
     private GameObject areaInsideObj;
 
+    // TODO: figure out a better way to do this but doing this now for testing
+    public GameObject bulletEmitter;
+    public GameObject bulletPrefab;
+
     public Vector3 getForward()
     {
         Vector3 forward = Vector3.Cross(Vector3.up, transform.right);
@@ -38,6 +42,21 @@ public class Player : MonoBehaviour
     private bool isNextToWater()
     {
         return areaInside.Equals("WaterProDaytime");
+    }
+
+    private void fireWeapon()
+    {
+        // https://forum.unity.com/threads/firing-a-bullet-from-a-gun.701327/
+        Vector3 forward = Vector3.Cross(bulletEmitter.transform.up, bulletEmitter.transform.forward); // bulletEmitter.transform.forward isn't really the forward we want
+        forward.Normalize();
+
+        //Debug.DrawRay(bulletEmitter.transform.position, forward * 10, Color.green);
+
+        GameObject bullet = Instantiate(bulletPrefab);
+        bullet.transform.position = bulletEmitter.transform.position;
+        bullet.transform.rotation = bulletEmitter.transform.rotation;
+
+        bullet.GetComponent<Rigidbody>().AddForce(forward * 20f, ForceMode.Impulse);
     }
 
     // Start is called before the first frame update
@@ -235,6 +254,13 @@ public class Player : MonoBehaviour
         if (anim.GetBool("isFishing"))
         {
             // TODO: get fish
+        }
+
+        if(anim.GetBool("isArmed") && Input.GetMouseButtonDown(0))
+        {
+            // fire weapon
+            Debug.Log("firing weapon");
+            fireWeapon();
         }
 
         //transform.Translate(Input.GetAxis("Horizontal") * 0.1f, 0, Input.GetAxis("Vertical") * 0.1f);

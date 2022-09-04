@@ -8,6 +8,9 @@ https://www.youtube.com/watch?v=izjz2Hya2QM&list=PLn3ukorJv4vsPA95G7jTHDHixF5Fnt
 // character movement, collisions/physics
 https://stackoverflow.com/questions/60414946/unity-addforce-while-using-moveposition-for-movement
 https://stackoverflow.com/questions/40861293/why-is-my-character-passing-through-the-object-even-though-i-have-configured-box
+https://answers.unity.com/questions/827590/head-rotation-while-animation-is-played.html
+https://forum.unity.com/threads/fps-multiplayer-turning-animation.141599/
+https://forum.unity.com/threads/overriding-animation.28451/
 
 controls:
 p to plant stuff
@@ -30,6 +33,7 @@ TODO:
   - bed
   - desk
 - get first-person camera/view working better
+  - add crosshairs? needs to align with mouse cursor
 - get fishing working?
 - get equip object working
 - maybe a basic inventory menu
@@ -38,3 +42,8 @@ TODO:
 - add trees, sky, clouds, better looking/expanded terrain to main map
 - add another cottage? more buildings. animals?
 - add fps stuff (target practice?)
+
+- try applying animation to only certain bones for certain situations?
+  - e.g. running while armed - I want the player to be able to look around while running with animation
+    - take away the torso and above bones from animation keyframes maybe so they don't get affected? 
+    - updating rotation manually in lateupdate works but it looks jittery since maybe the animation forces back the old rotation each frame update?

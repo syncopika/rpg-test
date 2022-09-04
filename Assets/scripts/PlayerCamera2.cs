@@ -13,7 +13,6 @@ public class PlayerCamera2 : MonoBehaviour
 
     // for mouse movement
     private float sensitivity = 100f;
-    private float clampY = 25.0f;
     private float rotY = 0.0f;
     private float rotX = 0.0f;
 
