@@ -12,6 +12,9 @@ https://answers.unity.com/questions/827590/head-rotation-while-animation-is-play
 https://forum.unity.com/threads/fps-multiplayer-turning-animation.141599/
 https://forum.unity.com/threads/overriding-animation.28451/
 
+// misc
+https://forum.unity.com/threads/3rd-person-camera-going-from-outdoors-to-indoors.267768/
+
 controls:
 p to plant stuff
 f to fish

@@ -16,6 +16,79 @@ public class PlayerCamera2 : MonoBehaviour
     private float rotY = 0.0f;
     private float rotX = 0.0f;
 
+    float distFromCamera = 8.5f;
+
+    Vector3 cameraPosCorrection = Vector3.zero;
+    string playerCharacterModelIdentifier = "human";
+
+    Vector3 getNewCameraPos()
+    {
+        Vector3 playerPos = new Vector3(
+            player.transform.position.x, transform.position.y, player.transform.position.z
+        );
+        //playerPos -= player.GetComponent<Player>().getForward() * 0.5f; // add some buffer room behind the player
+
+        Vector3 playerForward = player.GetComponent<Player>().getForward();
+        Vector3 newVec = distFromCamera * playerForward;
+        newVec.y = -5f;
+
+        if(cameraPosCorrection != Vector3.zero)
+        {
+            // if we're trying to figure out the pos of camera due to obstruction
+            RaycastHit hit;
+            if (Physics.Linecast(cameraPosCorrection, playerPos, out hit))
+            {
+                if (hit.transform && !hit.transform.name.Contains(playerCharacterModelIdentifier))
+                {
+                    //Debug.Log("trying to correct cam distance");
+                    // keep correcting the camera pos until no more boundary obstruction
+                    cameraPosCorrection += (playerForward * 0.1f);
+
+                    return cameraPosCorrection;
+                }
+            }
+
+            // no more obstruction! yay
+            cameraPosCorrection = Vector3.zero;
+
+            return transform.position; // return current pos
+            
+        }
+        else
+        {
+            Vector3 newDesiredPos = player.transform.position - newVec;
+
+            // if we can get to newDesiredPos, then let's do that
+            RaycastHit hit;
+            if (Physics.Linecast(newDesiredPos, playerPos, out hit) && hit.transform.name.Contains(playerCharacterModelIdentifier))
+            {
+                // no obstructions, desired pos OK
+                //Debug.Log("no obstructions found");
+                cameraPosCorrection = Vector3.zero;
+                return newDesiredPos;
+            }
+            else if (Physics.Linecast(transform.position, playerPos, out hit) && hit.transform.name.Contains(playerCharacterModelIdentifier))
+            {
+                // no obstruction from current cam pos to the player - we've reached a satisfactory distance.
+                // stop correcting camera pos
+                cameraPosCorrection = Vector3.zero;
+                return transform.position;
+            }
+            else
+            {
+                if (hit.transform && !hit.transform.name.Contains(playerCharacterModelIdentifier))
+                {
+                    Debug.Log("obstruction found");
+                    //Debug.Log(hit.transform);
+                    cameraPosCorrection = newDesiredPos; // start at new desired pos and correct pos as needed
+                    return cameraPosCorrection;
+                }
+
+                return transform.position;
+            }
+        }
+    }
+
     void shootRay()
     {
         RaycastHit hit;
@@ -53,6 +126,7 @@ public class PlayerCamera2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.F1))
         {
             inFirstPerson = !inFirstPerson;
@@ -106,22 +180,23 @@ public class PlayerCamera2 : MonoBehaviour
         }
         else
         {
-            transform.rotation = player.transform.rotation;
-
-            Vector3 newVec = 6f * playerForward;
-            newVec.y = -3f;
+            Vector3 newPos = getNewCameraPos();
 
             if (lastPos != null)
             {
-                transform.position = Vector3.Lerp(player.transform.position - newVec, lastPos, 0.6f);
+                transform.position = Vector3.Lerp(newPos, lastPos, 0.8f);
             }
             else
             {
-                transform.position = player.transform.position - newVec;
+                transform.position = newPos;
             }
+
+            transform.rotation = player.transform.rotation;
 
             lastPos = transform.position;
         }
 
+        //Debug.DrawLine(transform.position, player.transform.position, Color.blue);
+        //Debug.DrawRay(transform.position, transform.forward * 5, Color.green);
     }
 }
