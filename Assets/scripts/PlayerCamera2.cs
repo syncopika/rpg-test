@@ -21,6 +21,8 @@ public class PlayerCamera2 : MonoBehaviour
     Vector3 cameraPosCorrection = Vector3.zero;
     string playerCharacterModelIdentifier = "human";
 
+    bool rotationChanged = false;
+
     Vector3 getNewCameraPos()
     {
         Vector3 playerPos = new Vector3(
@@ -32,11 +34,11 @@ public class PlayerCamera2 : MonoBehaviour
         Vector3 newVec = distFromCamera * playerForward;
         newVec.y = -5f;
 
-        if(cameraPosCorrection != Vector3.zero)
+        if(cameraPosCorrection != Vector3.zero) // if camera needs correction
         {
             // if we're trying to figure out the pos of camera due to obstruction
             RaycastHit hit;
-            if (Physics.Linecast(cameraPosCorrection, playerPos, out hit))
+            if (Physics.Linecast(transform.position, playerPos, out hit))
             {
                 if (hit.transform && !hit.transform.name.Contains(playerCharacterModelIdentifier))
                 {
@@ -49,6 +51,7 @@ public class PlayerCamera2 : MonoBehaviour
             }
 
             // no more obstruction! yay
+            //Debug.Log("no more obstruction");
             cameraPosCorrection = Vector3.zero;
 
             return transform.position; // return current pos
@@ -56,7 +59,21 @@ public class PlayerCamera2 : MonoBehaviour
         }
         else
         {
+            // TODO: the camera still moves out of bounds sometimes
+            // e.g. when rotating when player is at a boundary
+            // sometimes when player is at a boundary and steps back far enough, the camera bounces to try to correct but never resolves
+
+            // check if current cam position is OK or needs to be corrected
+            // recalculate every time rotation changes? e.g. if rotation changes, set cameraPosCorrection to newDesiredPos
             Vector3 newDesiredPos = player.transform.position - newVec;
+
+            if (rotationChanged)
+            {
+                cameraPosCorrection = newDesiredPos;
+                rotationChanged = false;
+                //Debug.Log("rotation changed");
+                return cameraPosCorrection;
+            }
 
             // if we can get to newDesiredPos, then let's do that
             RaycastHit hit;
@@ -67,6 +84,13 @@ public class PlayerCamera2 : MonoBehaviour
                 cameraPosCorrection = Vector3.zero;
                 return newDesiredPos;
             }
+            else if (Physics.Linecast(newDesiredPos, playerPos, out hit) && !hit.transform.name.Contains(playerCharacterModelIdentifier))
+            {
+                // use hit.transform.position as a starting point but make sure the y axis value matches the camera
+                Vector3 startPos = new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z);
+                cameraPosCorrection = startPos; // start at obstruction pos and correct pos as needed
+                return cameraPosCorrection;
+            }
             else if (Physics.Linecast(transform.position, playerPos, out hit) && hit.transform.name.Contains(playerCharacterModelIdentifier))
             {
                 // no obstruction from current cam pos to the player - we've reached a satisfactory distance.
@@ -74,16 +98,16 @@ public class PlayerCamera2 : MonoBehaviour
                 cameraPosCorrection = Vector3.zero;
                 return transform.position;
             }
+            else if (Physics.Linecast(transform.position, playerPos, out hit) && !hit.transform.name.Contains(playerCharacterModelIdentifier))
+            {
+                //Debug.Log("obstruction found");
+                Vector3 startPos = new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z);
+                cameraPosCorrection = startPos;
+                return cameraPosCorrection;
+            }
             else
             {
-                if (hit.transform && !hit.transform.name.Contains(playerCharacterModelIdentifier))
-                {
-                    Debug.Log("obstruction found");
-                    //Debug.Log(hit.transform);
-                    cameraPosCorrection = newDesiredPos; // start at new desired pos and correct pos as needed
-                    return cameraPosCorrection;
-                }
-
+                cameraPosCorrection = Vector3.zero;
                 return transform.position;
             }
         }
@@ -114,8 +138,8 @@ public class PlayerCamera2 : MonoBehaviour
     {
         inFirstPerson = false;
         Vector3 playerForward = player.GetComponent<Player>().getForward();
-        Vector3 newVec = 9f * playerForward;
-        newVec.y = -4f;
+        Vector3 newVec = distFromCamera * playerForward;
+        newVec.y = -5f;
         transform.position = player.transform.position - newVec;
 
         Vector3 rot = transform.localRotation.eulerAngles;
@@ -138,6 +162,7 @@ public class PlayerCamera2 : MonoBehaviour
             Vector3 rot = transform.localRotation.eulerAngles;
             rotY = rot.y;
             rotX = rot.x;
+            rotationChanged = true;
         }
 
         Vector3 playerForward = player.GetComponent<Player>().getForward();
@@ -145,7 +170,7 @@ public class PlayerCamera2 : MonoBehaviour
         if (inFirstPerson)
         {
             Vector3 playerPos = player.transform.position;
-            transform.position = new Vector3(playerPos.x, playerPos.y + 4.5f, playerPos.z);
+            transform.position = new Vector3(playerPos.x, playerPos.y + 5.5f, playerPos.z);
 
             // allow look around with mouse when scope is on
             float mouseX = Input.GetAxis("Mouse X");
@@ -190,8 +215,6 @@ public class PlayerCamera2 : MonoBehaviour
             {
                 transform.position = newPos;
             }
-
-            transform.rotation = player.transform.rotation;
 
             lastPos = transform.position;
         }
