@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
     public Button yesButton;
     public Button noButton;
     public Text statusText;
+    public Canvas canvas;
+
+    Image canvasBackground;
 
     IEnumerator showStatusTemporarily(int timeToWait, string newStatus)
     {
@@ -19,12 +22,14 @@ public class GameManager : MonoBehaviour
 
     void hideButtons()
     {
+        canvasBackground.color = new Color32(0, 0, 0, 0);
         yesButton.GetComponent<CanvasGroup>().alpha = 0;
         noButton.GetComponent<CanvasGroup>().alpha = 0;
     }
 
     void showButtons()
     {
+        canvasBackground.color = new Color32(255, 255, 255, 128);
         yesButton.GetComponent<CanvasGroup>().alpha = 1;
         noButton.GetComponent<CanvasGroup>().alpha = 1;
     }
@@ -41,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     public void updateStatusTemporarily(int expiryTime, string newStatus)
     {
-        // update status for x num seconds
+        // update status for x num seconds - useful for showing a temporary message
         StartCoroutine(showStatusTemporarily(expiryTime, newStatus));
     }
 
@@ -77,6 +82,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        canvasBackground = canvas.GetComponent<Image>();
+
         hideButtons();
 
         noButton.onClick.AddListener(delegate

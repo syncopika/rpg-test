@@ -6,7 +6,8 @@ public class PlayerCamera : MonoBehaviour
 {
     public GameObject player;
     public GameObject gameManager;
-    public GameObject rotationBone;
+    public GameObject rotationBone; // torso
+    public GameObject headBone; // head
 
     private Vector3 lastPos;
     private bool inFirstPerson;
@@ -123,8 +124,6 @@ public class PlayerCamera : MonoBehaviour
             }
 
             lastPos = transform.position;
-
-            //transform.LookAt(characterNeck.transform);
         }
 
     }
@@ -136,8 +135,7 @@ public class PlayerCamera : MonoBehaviour
 
         if (inFirstPerson)
         {
-            Vector3 playerPos = player.transform.position;
-            transform.position = new Vector3(playerPos.x, playerPos.y + 4.5f, playerPos.z);
+            // TODO? in first person mode, make the head invisible - but this would require redoing the model to separate the head from the body so they're separate meshes
 
             // allow look around with mouse when scope is on
             float mouseX = Input.GetAxis("Mouse X");
@@ -159,17 +157,28 @@ public class PlayerCamera : MonoBehaviour
                 transform.rotation = localRotation; // camera rotation
 
                 rotationBone.transform.rotation = localRotation; // set character torso rotation to match camera
+                headBone.transform.rotation = localRotation;
+
                 rotationBoneRotation = localRotation;
 
-                player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, rotY, 0.0f); // this rotates the whole player about the y axis
+                player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, rotY, 0.0f); // this rotates the whole player about the y axis (left/right)
             }
             else
             {
                 if (rotationBoneRotation != Quaternion.identity)
                 {
                     rotationBone.transform.rotation = rotationBoneRotation;
+                    headBone.transform.rotation = rotationBoneRotation;
                 }
             }
+
+            Vector3 headPos = headBone.transform.position;
+            Vector3 newCamPos = headPos + (headBone.transform.forward * 0.5f);
+            newCamPos.y += 0.4f;
+
+            transform.position = newCamPos; //new Vector3(headPos.x, headPos.y + .5f, headPos.z);
+
+            Debug.DrawLine(headPos, headPos + (headBone.transform.forward * 5), Color.blue);
 
             if (Input.GetMouseButtonDown(0))
             {

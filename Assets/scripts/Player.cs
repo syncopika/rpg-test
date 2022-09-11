@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     public GameObject bulletEmitter;
     public GameObject bulletPrefab;
 
+    private InventoryManager inventory;
+
     public Vector3 getForward()
     {
         Vector3 forward = Vector3.Cross(Vector3.up, transform.right);
@@ -64,6 +66,7 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        inventory = GetComponent<InventoryManager>(); 
     }
 
     // Update is called once per frame
@@ -178,24 +181,24 @@ public class Player : MonoBehaviour
                 anim.SetBool("isPlantingSeeds", false);
             }
 
-            // shoveling - TODO: only allow if shovel equipped
-            else if (Input.GetKeyDown("v"))
+            // shoveling - only allow if shovel equipped
+            else if (Input.GetKeyDown("v") && inventory.currentlyEquippedObjName().Equals("shovel"))
             {
                 anim.SetBool("isShoveling", true);
                 areaInsideObj.GetComponent<GardenManager>().shovel();
             }
-            else if (Input.GetKeyUp("v"))
+            else if (Input.GetKeyUp("v") && inventory.currentlyEquippedObjName().Equals("shovel"))
             {
                 anim.SetBool("isShoveling", false);
             }
 
-            // raking - TODO: only allow if rake equipped
-            else if (Input.GetKeyDown("y"))
+            // raking - only allow if rake equipped
+            else if (Input.GetKeyDown("y") && inventory.currentlyEquippedObjName().Equals("rake"))
             {
                 anim.SetBool("isRaking", true);
                 areaInsideObj.GetComponent<GardenManager>().rake();
             }
-            else if (Input.GetKeyUp("y"))
+            else if (Input.GetKeyUp("y") && inventory.currentlyEquippedObjName().Equals("rake"))
             {
                 anim.SetBool("isRaking", false);
             }
