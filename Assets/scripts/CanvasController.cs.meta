@@ -1,11 +1,9 @@
 fileFormatVersion: 2
-guid: beebb2f41a3770f46b90deb9ba1353f7
+guid: 450bad1e7440de04db4c23d8520fdc0f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - canvasPrefab: {fileID: 1514449893307254563, guid: 10aa3a1ef47023849b065adc235939e3,
-      type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -14,6 +14,7 @@ https://forum.unity.com/threads/overriding-animation.28451/
 
 // misc
 https://forum.unity.com/threads/3rd-person-camera-going-from-outdoors-to-indoors.267768/
+https://answers.unity.com/questions/1399742/dontdestroyonload-duplicating-objects-when-scene-r.html
 
 controls:
 p to plant stuff

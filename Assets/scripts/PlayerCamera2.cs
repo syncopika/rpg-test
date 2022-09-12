@@ -5,8 +5,10 @@ using UnityEngine;
 public class PlayerCamera2 : MonoBehaviour
 {
     public GameObject player;
-    public GameObject gameManager;
+    //public GameObject gameManager;
     public GameObject rotationBone;
+
+    GameObject gameManager;
 
     private Vector3 lastPos;
     private bool inFirstPerson;
@@ -22,6 +24,25 @@ public class PlayerCamera2 : MonoBehaviour
     string playerCharacterModelIdentifier = "human";
 
     bool rotationChanged = false;
+
+    void shootRay()
+    {
+        RaycastHit hit;
+        Ray r = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(r, out hit))
+        {
+            if (hit.collider != null)
+            {
+                Debug.Log("ray hit: " + hit.transform);
+                if (hit.transform.name.ToLower().Contains("door"))
+                {
+                    // leave cottage scene
+                    gameManager.GetComponent<GameManager>().updateStatusWithButtons("leave cottage?", 1);
+                }
+            }
+        }
+    }
 
     Vector3 getNewCameraPos()
     {
@@ -113,26 +134,6 @@ public class PlayerCamera2 : MonoBehaviour
         }
     }
 
-    void shootRay()
-    {
-        RaycastHit hit;
-        Ray r = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(r, out hit))
-        {
-            if (hit.collider != null)
-            {
-                Debug.Log("ray hit: " + hit.transform);
-                if (hit.transform.name.Contains("cottage"))
-                {
-                    // enter cottage scene
-                    gameManager.GetComponent<GameManager>().updateStatusWithButtons("enter cottage?");
-                    //Debug.Log("enter cottage?");
-                }
-            }
-        }
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -145,6 +146,9 @@ public class PlayerCamera2 : MonoBehaviour
         Vector3 rot = transform.localRotation.eulerAngles;
         rotY = rot.y;
         rotX = rot.x;
+
+        // gamemanager is not native to this scene but comes from DontDestroyOnLoad so it should be available here
+        gameManager = GameObject.Find("GameManager");
     }
 
     // Update is called once per frame

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+// TODO: rename? more like a UI manager atm
 public class GameManager : MonoBehaviour
 {
     public Button yesButton;
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
     public Canvas canvas;
 
     Image canvasBackground;
+
+    static GameManager gmInstance;
 
     IEnumerator showStatusTemporarily(int timeToWait, string newStatus)
     {
@@ -34,14 +37,16 @@ public class GameManager : MonoBehaviour
         noButton.GetComponent<CanvasGroup>().alpha = 1;
     }
 
-    public void updateStatusWithButtons(string newStatus)
+    // TODO: use an enum for state
+    public void updateStatusWithButtons(string newStatus, int state)
     {
         // ideally to be used when switching scenes
         setStatus(newStatus);
         showButtons();
 
         // TODO: maybe pass another arg to indicate what to do if yes button is pressed?
-        clickYesToEnterCottage();
+        if (state == 0) clickYesToEnterCottage();
+        if (state == 1) clickYesToEnterWorldMap();
     }
 
     public void updateStatusTemporarily(int expiryTime, string newStatus)
@@ -68,15 +73,28 @@ public class GameManager : MonoBehaviour
 
     void clickYesToEnterCottage()
     {
-        yesButton.onClick.AddListener(delegate
-        {
-            enterCottage();
-        });
+        yesButton.onClick.AddListener(enterCottage);
     }
 
     void enterCottage()
     {
+        hideButtons();
+        clearStatus();
         SceneManager.LoadScene("cottage-interior");
+        yesButton.onClick.RemoveAllListeners();
+    }
+
+    void enterWorld()
+    {
+        hideButtons();
+        clearStatus();
+        SceneManager.LoadScene("main");
+        yesButton.onClick.RemoveAllListeners();
+    }
+
+    void clickYesToEnterWorldMap()
+    {
+        yesButton.onClick.AddListener(enterWorld);
     }
 
     // Start is called before the first frame update
@@ -86,15 +104,25 @@ public class GameManager : MonoBehaviour
 
         hideButtons();
 
-        noButton.onClick.AddListener(delegate
-        {
-            clickNoButton();
-        });
+        noButton.onClick.AddListener(clickNoButton);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void Awake()
+    {
+        if (gmInstance == null)
+        {
+            gmInstance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if(gmInstance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 }

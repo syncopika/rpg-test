@@ -33,7 +33,7 @@ public class PlayerCamera : MonoBehaviour
                 if (hit.transform.name.ToLower().Contains("door"))
                 {
                     // enter cottage scene
-                    gameManager.GetComponent<GameManager>().updateStatusWithButtons("enter cottage?");
+                    gameManager.GetComponent<GameManager>().updateStatusWithButtons("enter cottage?", 0);
                     //Debug.Log("enter cottage?");
                 }
             }
@@ -56,6 +56,9 @@ public class PlayerCamera : MonoBehaviour
         Vector3 rot = transform.localRotation.eulerAngles;
         rotY = rot.y;
         rotX = rot.x;
+
+        // get the gamemanager when coming back to this scene.
+        gameManager = GameObject.Find("GameManager");
     }
 
     // Update is called once per frame

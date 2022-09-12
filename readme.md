@@ -1,6 +1,6 @@
 # rpg-test    
     
-having fun with Unity and Blender and trying to make an RPG :).    
+having fun with Unity and Blender and trying to make an RPG :)    
     
 it's very much a WIP but here's some screenshots:    
 ![third person camera view example](/screenshots/third-person-example.png)    
