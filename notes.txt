@@ -15,14 +15,17 @@ https://forum.unity.com/threads/overriding-animation.28451/
 // misc
 https://forum.unity.com/threads/3rd-person-camera-going-from-outdoors-to-indoors.267768/
 https://answers.unity.com/questions/1399742/dontdestroyonload-duplicating-objects-when-scene-r.html
+https://answers.unity.com/questions/987601/when-loading-into-a-new-scene-my-ui-doesnt-work-an.html
+- adding an eventsystem to the interior scene (since it didn't exist already) seemed to get the ui buttons working.
 
 controls:
 p to plant stuff
 f to fish
 w,s,a,d to move
 shift to run while pressing w or s
+equip items with 1,2,3,4. put away with 5.
 
-stuff with tools
+stuff with tools (need to equip first)
 - water plants w/ c
 - shovel with v
 - rake with y
@@ -36,18 +39,30 @@ TODO:
   - books, bookshelf
   - bed
   - desk
+  - be able to eat food
+
+- add another building e.g. a tavern!
+  - have card game minigame
+
 - get first-person camera/view working better
   - add crosshairs? needs to align with mouse cursor
+
 - get fishing working?
-- get equip object working
+
 - maybe a basic inventory menu
+
 - flesh out gardening/planting seeds, growing them? watering them?
-  - watering can -> how to simulate water droplets -> particle system?
+
 - add trees, sky, clouds, better looking/expanded terrain to main map
+
 - add another cottage? more buildings. animals?
+
 - add fps stuff (target practice?)
 
 - try applying animation to only certain bones for certain situations?
   - e.g. running while armed - I want the player to be able to look around while running with animation
     - take away the torso and above bones from animation keyframes maybe so they don't get affected? 
     - updating rotation manually in lateupdate works but it looks jittery since maybe the animation forces back the old rotation each frame update?
+
+- get walking on terrain working better? or change terrain?
+  - one issue is walking on terrain can sometimes push the player in a different direction (b/c rigidbody physics?).

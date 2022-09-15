@@ -96,27 +96,23 @@ public class Player : MonoBehaviour
         }
         else if (Input.GetKeyDown("a"))
         {
-            // isWalkSide
             anim.SetBool("isIdle", false);
             anim.SetBool("isWalkSide", true);
             anim.SetFloat("direction", -1f);
         }
         else if (Input.GetKeyUp("a"))
         {
-            // back to idle
             anim.SetBool("isIdle", true);
             anim.SetBool("isWalkSide", false);
         }
         else if (Input.GetKeyDown("d"))
         {
-            // isWalkSide = true
             anim.SetBool("isIdle", false);
             anim.SetBool("isWalkSide", true);
             anim.SetFloat("direction", 1f);
         }
         else if (Input.GetKeyUp("d"))
         {
-            // back to idle
             anim.SetBool("isIdle", true);
             anim.SetBool("isWalkSide", false);
         }
@@ -135,7 +131,8 @@ public class Player : MonoBehaviour
             anim.SetBool("isIdle", true);
             anim.SetBool("isWalk", false);
         }
-        else if (Input.GetKeyDown(KeyCode.LeftShift))
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             // use shift to toggle running
             anim.SetBool("isRun", true);
@@ -160,8 +157,8 @@ public class Player : MonoBehaviour
 
         if (isInGarden() && !anim.GetBool("isArmed"))
         {
-            // watering plants - TODO: only allow if watering can equipped
-            if (Input.GetKeyDown("c"))
+            // watering plants
+            if (Input.GetKeyDown("c") && inventory.currentlyEquippedObjName().Equals("wateringCan"))
             {
                 anim.SetBool("isWateringPlants", true);
             }

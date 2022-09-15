@@ -13,8 +13,8 @@ public class InventoryManager : MonoBehaviour
     public GameObject rake;
     public GameObject wateringCan;
 
-    private GameObject currentlyEquipped;
-    private string currentlyEquippedName;
+    private GameObject currentlyEquipped = null;
+    private string currentlyEquippedName = "";
 
     private Dictionary<string, GameObject> inventory = new Dictionary<string, GameObject>();
 
@@ -77,10 +77,11 @@ public class InventoryManager : MonoBehaviour
         }
         else if (Input.GetKeyUp("4"))
         {
-            equip(""); // put away current item
+            equip("wateringCan");
         }
         else if (Input.GetKeyUp("5"))
         {
+            equip(""); // put away current item
         }
     }
 }
