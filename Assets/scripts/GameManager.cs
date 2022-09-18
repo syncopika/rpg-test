@@ -45,8 +45,11 @@ public class GameManager : MonoBehaviour
         showButtons();
 
         // TODO: maybe pass another arg to indicate what to do if yes button is pressed?
-        if (state == 0) clickYesToEnterCottage();
-        if (state == 1) clickYesToEnterWorldMap();
+        if (state == 0) 
+            clickYesToEnterCottage();
+
+        if (state == 1) 
+            clickYesToEnterWorldMap();
     }
 
     public void updateStatusTemporarily(int expiryTime, string newStatus)

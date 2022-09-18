@@ -16,14 +16,15 @@ https://forum.unity.com/threads/overriding-animation.28451/
 https://forum.unity.com/threads/3rd-person-camera-going-from-outdoors-to-indoors.267768/
 https://answers.unity.com/questions/1399742/dontdestroyonload-duplicating-objects-when-scene-r.html
 https://answers.unity.com/questions/987601/when-loading-into-a-new-scene-my-ui-doesnt-work-an.html
-- adding an eventsystem to the interior scene (since it didn't exist already) seemed to get the ui buttons working.
+  - adding an eventsystem to the interior scene (since it didn't exist already) seemed to get the ui buttons working.
+https://answers.unity.com/questions/622459/set-directionallight-rotation-for-daynight-per-tim.html
 
 controls:
 p to plant stuff
 f to fish
 w,s,a,d to move
 shift to run while pressing w or s
-equip items with 1,2,3,4. put away with 5.
+equip items with 1,2,3,4,5. put away with 6.
 
 stuff with tools (need to equip first)
 - water plants w/ c
@@ -40,9 +41,7 @@ TODO:
   - bed
   - desk
   - be able to eat food
-
-- add another building e.g. a tavern!
-  - have card game minigame
+  - climb ladder
 
 - get first-person camera/view working better
   - add crosshairs? needs to align with mouse cursor
@@ -56,8 +55,11 @@ TODO:
 - add trees, sky, clouds, better looking/expanded terrain to main map
 
 - add another cottage? more buildings. animals?
+  - add a tavern!
+    - have card game minigame inside
 
 - add fps stuff (target practice?)
+ - add some barrels/cans that can get knocked over
 
 - try applying animation to only certain bones for certain situations?
   - e.g. running while armed - I want the player to be able to look around while running with animation
@@ -66,3 +68,4 @@ TODO:
 
 - get walking on terrain working better? or change terrain?
   - one issue is walking on terrain can sometimes push the player in a different direction (b/c rigidbody physics?).
+  - maybe don't use physics for walking?

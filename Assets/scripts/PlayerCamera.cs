@@ -34,7 +34,6 @@ public class PlayerCamera : MonoBehaviour
                 {
                     // enter cottage scene
                     gameManager.GetComponent<GameManager>().updateStatusWithButtons("enter cottage?", 0);
-                    //Debug.Log("enter cottage?");
                 }
             }
         }
@@ -68,7 +67,7 @@ public class PlayerCamera : MonoBehaviour
         {
             inFirstPerson = !inFirstPerson;
 
-            if(inFirstPerson && inThirdPersonFront)
+            if (inFirstPerson && inThirdPersonFront)
             {
                 transform.rotation = player.transform.rotation; // if going from thirdpersonfront back to first person, correct the rotation
             }
@@ -100,13 +99,9 @@ public class PlayerCamera : MonoBehaviour
             newVec.y = 3f;
 
             if (lastPos != null)
-            {
                 transform.position = Vector3.Lerp(player.transform.position + newVec, lastPos, 0.6f);
-            }
             else
-            {
                 transform.position = player.transform.position + newVec;
-            }
 
             lastPos = transform.position;
 
@@ -119,12 +114,9 @@ public class PlayerCamera : MonoBehaviour
             newVec.y = -3f;
 
             if (lastPos != null)
-            {
                 transform.position = Vector3.Lerp(player.transform.position - newVec, lastPos, 0.6f);
-            }
-            else {
+            else
                 transform.position = player.transform.position - newVec;
-            }
 
             lastPos = transform.position;
         }
@@ -184,9 +176,7 @@ public class PlayerCamera : MonoBehaviour
             Debug.DrawLine(headPos, headPos + (headBone.transform.forward * 5), Color.blue);
 
             if (Input.GetMouseButtonDown(0))
-            {
                 shootRay();
-            }
         }
     }
 }

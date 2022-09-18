@@ -48,8 +48,6 @@ public class InventoryManager : MonoBehaviour
         return null;
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         inventory["fishingPole"] = fishingPole;
@@ -59,29 +57,20 @@ public class InventoryManager : MonoBehaviour
         inventory["wateringCan"] = wateringCan;
     }
 
-    // Update is called once per frame
     void Update()
     {
         // use numpad for toggling between objects
         if (Input.GetKeyUp("1"))
-        {
             equip("rifle");
-        }
         else if (Input.GetKeyUp("2"))
-        {
             equip("shovel");
-        }
         else if (Input.GetKeyUp("3"))
-        {
             equip("rake");
-        }
         else if (Input.GetKeyUp("4"))
-        {
             equip("wateringCan");
-        }
         else if (Input.GetKeyUp("5"))
-        {
+            equip("fishingPole");
+        else if (Input.GetKeyUp("6"))
             equip(""); // put away current item
-        }
     }
 }

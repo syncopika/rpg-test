@@ -212,13 +212,9 @@ public class PlayerCamera2 : MonoBehaviour
             Vector3 newPos = getNewCameraPos();
 
             if (lastPos != null)
-            {
                 transform.position = Vector3.Lerp(newPos, lastPos, 0.8f);
-            }
             else
-            {
                 transform.position = newPos;
-            }
 
             lastPos = transform.position;
         }

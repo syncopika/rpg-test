@@ -61,7 +61,6 @@ public class Player : MonoBehaviour
         bullet.GetComponent<Rigidbody>().AddForce(forward * 20f, ForceMode.Impulse);
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -69,7 +68,6 @@ public class Player : MonoBehaviour
         inventory = GetComponent<InventoryManager>(); 
     }
 
-    // Update is called once per frame
     void Update()
     {
         // let player turn left and right
@@ -82,7 +80,11 @@ public class Player : MonoBehaviour
             transform.Rotate(Vector3.up * Time.deltaTime * 300f);
         }
 
-        // handle animation toggling
+        // TODO: left/right lean for q and e when armed?
+
+        // all the key presses in this if/else if block
+        // are associated with actions that shouldn't be activated
+        // simultaneously with another
         if (Input.GetKeyDown("w"))
         {
             anim.SetBool("isIdle", false);
@@ -132,26 +134,35 @@ public class Player : MonoBehaviour
             anim.SetBool("isWalk", false);
         }
         
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        
+        if (Input.GetKeyUp("u") && anim.GetBool("isIdle"))
         {
-            // use shift to toggle running
-            anim.SetBool("isRun", true);
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            anim.SetBool("isRun", false);
+            if (anim.GetBool("isArmed"))
+                anim.SetBool("isArmed", false);
+            else
+                anim.SetBool("isArmed", true);
         }
 
-        // fishing - TODO: only allow if fishing pole equipped
-        if (isNextToWater())
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            anim.SetBool("isRun", true);
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+            anim.SetBool("isRun", false);
+
+        // fishing
+        if (isNextToWater() && inventory.currentlyEquippedObjName().Equals("fishingPole"))
         {
-            if (Input.GetKeyDown("f"))
+            if (Input.GetKeyDown("f") && anim.GetBool("isIdle"))
             {
                 anim.SetBool("isFishing", true);
+                inventory.currentlyEquippedObj().transform.GetComponent<FishingPoleController>().toggleFishingLine();
             }
             else if (Input.GetKeyUp("f"))
             {
                 anim.SetBool("isFishing", false);
+
+                // TODO? wait until animation is finished before disabling line renderer for fishing line
+                // https://answers.unity.com/questions/426266/how-to-wait-until-an-animation-is-finished.html
+                inventory.currentlyEquippedObj().transform.GetComponent<FishingPoleController>().toggleFishingLine();
             }
         }
 
@@ -159,13 +170,9 @@ public class Player : MonoBehaviour
         {
             // watering plants
             if (Input.GetKeyDown("c") && inventory.currentlyEquippedObjName().Equals("wateringCan"))
-            {
                 anim.SetBool("isWateringPlants", true);
-            }
             else if (Input.GetKeyUp("c"))
-            {
                 anim.SetBool("isWateringPlants", false);
-            }
 
             // planting seeds
             else if (Input.GetKeyDown("p"))
@@ -205,25 +212,16 @@ public class Player : MonoBehaviour
         if (Input.GetKey("w"))
         {
             if (anim.GetBool("isRun"))
-            {
                 transform.position += transform.forward * Time.deltaTime * 9f;
-                //rb.AddForce(transform.forward * Time.deltaTime * 30f);
-            }
             else 
-            {
                 transform.position += transform.forward * Time.deltaTime * 5f;
-                //rb.velocity = (transform.forward * 5f);
-            }
-        }else if (Input.GetKey("s"))
+        }
+        else if (Input.GetKey("s"))
         {
             if (anim.GetBool("isRun"))
-            {
                 transform.position -= transform.forward * Time.deltaTime * 9f;
-            }
             else
-            {
                 transform.position -= transform.forward * Time.deltaTime * 5f;
-            }
         }
         else if (Input.GetKey("a"))
         {
@@ -234,21 +232,9 @@ public class Player : MonoBehaviour
             transform.position += transform.right * Time.deltaTime * 5f;
         }
         
-        if (Input.GetKeyDown("j"))
+        if (Input.GetKeyDown("j") && !anim.GetBool("isArmed"))
         {
             anim.SetTrigger("jump");
-        }
-
-        if (Input.GetKeyDown("u"))
-        {
-            if (anim.GetBool("isArmed"))
-            {
-                anim.SetBool("isArmed", false);
-            }
-            else
-            {
-                anim.SetBool("isArmed", true);
-            }
         }
 
         if (anim.GetBool("isFishing"))
@@ -256,10 +242,10 @@ public class Player : MonoBehaviour
             // TODO: get fish
         }
 
-        if(anim.GetBool("isArmed") && Input.GetMouseButtonDown(0))
+        if (anim.GetBool("isArmed") && Input.GetMouseButtonDown(0))
         {
             // fire weapon
-            Debug.Log("firing weapon");
+            //Debug.Log("firing weapon");
             fireWeapon();
         }
 
