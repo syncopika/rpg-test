@@ -61,6 +61,11 @@ public class Player : MonoBehaviour
         bullet.GetComponent<Rigidbody>().AddForce(forward * 20f, ForceMode.Impulse);
     }
 
+    private void adjustVerticalHeightBasedOnTerrain()
+    {
+        // https://github.com/syncopika/threejs-projects/blob/master/character_demo/index.js#L207
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();

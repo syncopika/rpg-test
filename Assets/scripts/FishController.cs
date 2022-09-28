@@ -10,32 +10,69 @@ public class FishController : MonoBehaviour
 
     Vector3 position;
 
-    // TODO: if fishing pole floater is within range, swim towards it
-    // currently normal is perpendicular to the head of the fish.
-    //
-    // to swim to floater, rotate fish until head (x-axis?) faces floater. (use RotateTowards?)
-    // then swim towards via adding to transform.position.
+    Animator animator;
 
-    void OnCollisionEnter(Collision collision)
+    bool movingTowardsTarget = false;
+
+    void OnTriggerStay(Collider other)
     {
-        if (collision.transform.name.Equals("floater"))
+        if (other.transform.name.Equals("floater"))
         {
             // TODO: swim towards floater
+            movingTowardsTarget = true;
+
+            Vector3 targetDir = other.transform.position - transform.position;
+            Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, 0.8f * Time.deltaTime, 0.0f);
+
+            transform.rotation = Quaternion.LookRotation(newDir);
+
+            transform.position = Vector3.MoveTowards(transform.position, other.transform.position, 0.5f * Time.deltaTime);
         }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        movingTowardsTarget = false;
+    }
+
+    void isCaught()
+    {
+        // TODO
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        position = new Vector3(transform.position.x, transform.position.y, transform.position.z); // center of the circle swim path
+
+        animator = transform.GetComponent<Animator>();
+        animator.SetBool("isSwim", true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 newPos = new Vector3(Mathf.Cos(angle) * radius, transform.position.y, Mathf.Sin(angle)* radius);
-        transform.position = new Vector3(position.x + newPos.x, position.y, position.z + newPos.z);
-        transform.LookAt(position);
-        angle += Time.deltaTime * speed;
+        if (!movingTowardsTarget)
+        {
+            Vector3 newPos = new Vector3(Mathf.Cos(angle) * radius, transform.position.y, Mathf.Sin(angle) * radius);
+            transform.position = new Vector3(position.x + newPos.x, position.y, position.z + newPos.z);
+
+            // find a vector tangent to the point on the circle path of the fish and have the fish look at it.
+            // that way the fish will be facing the right direction when it's swimming in a circle
+            Vector3 tangentVec = Vector3.Cross(transform.position - position, Vector3.up).normalized;
+
+            Vector3 tangentPoint = transform.position + (tangentVec * 3f);
+
+            //Debug.DrawLine(transform.position, tangentPoint, Color.blue);
+            //Debug.DrawLine(transform.position, position, Color.red);
+
+            transform.LookAt(tangentPoint);
+
+            angle += Time.deltaTime * speed;
+        }
+
+        // TODO: if fish gets the floater, it should go from swim->flail
+        // fish should also latch on to floater somehow and be pulled up with floater
+
     }
 }
