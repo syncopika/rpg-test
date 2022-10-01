@@ -47,8 +47,6 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
 
         //Make what's hanging from the rope look at the next to last rope position to make it rotate with the rope
         whatIsHangingFromTheRope.LookAt(allRopeSections[allRopeSections.Count - 2].pos);
-
-        //Debug.Log(whatIsHangingFromTheRope.position);
     }
 
     private void FixedUpdate()

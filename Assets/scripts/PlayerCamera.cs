@@ -96,7 +96,7 @@ public class PlayerCamera : MonoBehaviour
             transform.rotation = player.transform.rotation * Quaternion.Euler(0, 180f, 0); // rotate 180 deg to face player
 
             Vector3 newVec = 9f * playerForward;
-            newVec.y = 3f;
+            newVec.y = 4f;
 
             if (lastPos != null)
                 transform.position = Vector3.Lerp(player.transform.position + newVec, lastPos, 0.6f);
@@ -111,12 +111,29 @@ public class PlayerCamera : MonoBehaviour
             transform.rotation = player.transform.rotation;
 
             Vector3 newVec = 9f * playerForward;
-            newVec.y = -3f;
+            newVec.y = -4f;
+
+            // by default, we'd like to place the camera at newPos
+            Vector3 newPos = player.transform.position - newVec;
+
+            // but there might be an obstacle in between the player and the camera so check first
+            // note the raycast is from player position to camera. seems to work better than going from camera pos to player pos :/.
+            Vector3 currPlayerPos = new Vector3(player.transform.position.x, newPos.y, player.transform.position.z);
+
+            RaycastHit hit;
+            if (lastPos != null && Physics.Raycast(currPlayerPos, -playerForward, out hit, Vector3.Distance(currPlayerPos, newPos)))
+            {
+                if (hit.transform.name.Equals("Terrain"))
+                {
+                    Vector3 correctedNewPos = hit.point + playerForward * 3f;
+                    newPos = correctedNewPos;
+                }
+            }
 
             if (lastPos != null)
-                transform.position = Vector3.Lerp(player.transform.position - newVec, lastPos, 0.6f);
+                transform.position = Vector3.Lerp(lastPos, newPos, 1f);
             else
-                transform.position = player.transform.position - newVec;
+                transform.position = newPos;
 
             lastPos = transform.position;
         }
@@ -169,11 +186,10 @@ public class PlayerCamera : MonoBehaviour
 
             Vector3 headPos = headBone.transform.position;
             Vector3 newCamPos = headPos + (headBone.transform.forward * 0.5f);
-            newCamPos.y += 0.4f;
+
+            newCamPos.y += 0.5f;
 
             transform.position = newCamPos; //new Vector3(headPos.x, headPos.y + .5f, headPos.z);
-
-            Debug.DrawLine(headPos, headPos + (headBone.transform.forward * 5), Color.blue);
 
             if (Input.GetMouseButtonDown(0))
                 shootRay();

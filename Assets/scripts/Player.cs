@@ -83,7 +83,13 @@ public class Player : MonoBehaviour
     {
         RaycastHit hit;
 
-        if(Physics.Raycast(baselineObj.transform.position, -Vector3.up, out hit, 15.0f))
+        // avoid water, which is layer 4
+        // https://docs.unity3d.com/Manual/use-layers.html
+        int waterLayer = 1 << 4;
+
+        waterLayer = ~waterLayer;
+
+        if(Physics.Raycast(baselineObj.transform.position, -Vector3.up, out hit, 15.0f, waterLayer))
         {
             if (hit.transform.name.Equals("Terrain"))
             {

@@ -18,19 +18,20 @@ public class FishController : MonoBehaviour
     {
         if (other.transform.name.Equals("floater"))
         {
-            // TODO: swim towards floater
+            // swim towards floater
+            //Debug.DrawLine(transform.position, other.transform.position, Color.red);
+
             movingTowardsTarget = true;
 
-            Vector3 targetDir = other.transform.position - transform.position;
+            Vector3 targetDir = other.gameObject.transform.position - transform.position;
             Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, 0.8f * Time.deltaTime, 0.0f);
 
             transform.rotation = Quaternion.LookRotation(newDir);
 
-            Debug.Log("other pos: " + other.transform.position.ToString() + ", fish pos: " + transform.position.ToString());
-            //Debug.Log(transform.position);
-            if(Vector3.Distance(transform.position, other.transform.position) > 0.5f)
+            //Debug.Log("other pos: " + other.gameObject.transform.position.ToString() + ", fish pos: " + transform.position.ToString());
+            if(Vector3.Distance(transform.position, other.gameObject.transform.position) > 2.5f)
             {
-                transform.position = Vector3.MoveTowards(transform.position, other.transform.position, 0.7f * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, other.gameObject.transform.position, 0.7f * Time.deltaTime);
             }
         }
     }
