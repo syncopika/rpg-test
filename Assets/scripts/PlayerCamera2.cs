@@ -18,7 +18,7 @@ public class PlayerCamera2 : MonoBehaviour
     private float rotY = 0.0f;
     private float rotX = 0.0f;
 
-    float distFromCamera = 8.5f;
+    float distFromCamera = 8.2f;
 
     Vector3 cameraPosCorrection = Vector3.zero;
     string playerCharacterModelIdentifier = "human";

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// kinematic, non-physics
 public class Player : MonoBehaviour
 {
     private Rigidbody rb;
@@ -13,6 +14,9 @@ public class Player : MonoBehaviour
     // TODO: figure out a better way to do this but doing this now for testing
     public GameObject bulletEmitter;
     public GameObject bulletPrefab;
+
+    // for detecting distance between player model and terrain/ground
+    public GameObject baselineObj;
 
     private InventoryManager inventory;
 
@@ -34,6 +38,20 @@ public class Player : MonoBehaviour
     {
         areaInside = "";
         areaInsideObj = null;
+    }
+
+    private bool checkIfCanMove(Vector3 dir)
+    {
+        RaycastHit hit;
+        if(rb.SweepTest(dir, out hit, 1.0f))
+        {
+            if (hit.transform.tag.Equals("obstacle"))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private bool isInGarden()
@@ -63,29 +81,30 @@ public class Player : MonoBehaviour
 
     private void adjustVerticalHeightBasedOnTerrain()
     {
-        // https://github.com/syncopika/threejs-projects/blob/master/character_demo/index.js#L207
+        RaycastHit hit;
+
+        if(Physics.Raycast(baselineObj.transform.position, -Vector3.up, out hit, 15.0f))
+        {
+            if (hit.transform.name.Equals("Terrain"))
+            {
+                //Debug.Log("distance to terrain: " + hit.distance);
+                //Debug.Log("hit pos y: " + hit.point.y + ", curr pos y: " + transform.position.y);
+                transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+            }
+        }
+
     }
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
-        inventory = GetComponent<InventoryManager>(); 
+        inventory = GetComponent<InventoryManager>();
     }
 
     void Update()
     {
-        // let player turn left and right
-        if (Input.GetKey("q"))
-        {
-            transform.Rotate(-Vector3.up * Time.deltaTime * 300f); // rotate counterclockwise about the Y axis
-        }
-        else if (Input.GetKey("e"))
-        {
-            transform.Rotate(Vector3.up * Time.deltaTime * 300f);
-        }
-
-        // TODO: left/right lean for q and e when armed?
+        adjustVerticalHeightBasedOnTerrain();
 
         // all the key presses in this if/else if block
         // are associated with actions that shouldn't be activated
@@ -138,8 +157,59 @@ public class Player : MonoBehaviour
             anim.SetBool("isIdle", true);
             anim.SetBool("isWalk", false);
         }
-        
-        
+
+        // TODO: left/right lean for q and e when armed?
+        // let player turn left and right
+        if (Input.GetKey("q") && checkIfCanMove(transform.rotation * (-Vector3.up * Time.deltaTime * 300f)))
+        {
+            transform.Rotate(-Vector3.up * Time.deltaTime * 300f); // rotate counterclockwise about the Y axis
+        }
+        else if (Input.GetKey("e") && checkIfCanMove(transform.rotation * (Vector3.up * Time.deltaTime * 300f)))
+        {
+            transform.Rotate(Vector3.up * Time.deltaTime * 300f);
+        }
+
+        // handle movement (no root motion)
+        if (Input.GetKey("w") && checkIfCanMove(transform.forward))
+        {
+            if (anim.GetBool("isRun"))
+                transform.position += transform.forward * Time.deltaTime * 9f;
+            else
+                transform.position += transform.forward * Time.deltaTime * 5f;
+        }
+        else if (Input.GetKey("s") && checkIfCanMove(-transform.forward))
+        {
+            if (anim.GetBool("isRun"))
+                transform.position -= transform.forward * Time.deltaTime * 9f;
+            else
+                transform.position -= transform.forward * Time.deltaTime * 5f;
+        }
+        else if (Input.GetKey("a") && checkIfCanMove(-transform.right))
+        {
+            transform.position -= transform.right * Time.deltaTime * 5f;
+        }
+        else if (Input.GetKey("d") && checkIfCanMove(transform.right))
+        {
+            transform.position += transform.right * Time.deltaTime * 5f;
+        }
+
+        if (Input.GetKeyDown("j") && !anim.GetBool("isArmed"))
+        {
+            // allow root motion for jumping? https://answers.unity.com/questions/766225/turn-off-root-motion-for-a-specific-animation.html
+            anim.SetTrigger("jump");
+        }
+
+        if (anim.GetBool("isFishing"))
+        {
+            // TODO: get fish
+        }
+
+        if (anim.GetBool("isArmed") && Input.GetMouseButtonDown(0))
+        {
+            // fire weapon
+            fireWeapon();
+        }
+
         if (Input.GetKeyUp("u") && anim.GetBool("isIdle"))
         {
             if (anim.GetBool("isArmed"))
@@ -213,51 +283,9 @@ public class Player : MonoBehaviour
             }
         }
 
-        // handle movement (no root motion)
-        if (Input.GetKey("w"))
-        {
-            if (anim.GetBool("isRun"))
-                transform.position += transform.forward * Time.deltaTime * 9f;
-            else 
-                transform.position += transform.forward * Time.deltaTime * 5f;
-        }
-        else if (Input.GetKey("s"))
-        {
-            if (anim.GetBool("isRun"))
-                transform.position -= transform.forward * Time.deltaTime * 9f;
-            else
-                transform.position -= transform.forward * Time.deltaTime * 5f;
-        }
-        else if (Input.GetKey("a"))
-        {
-            transform.position -= transform.right * Time.deltaTime * 5f;
-        }
-        else if (Input.GetKey("d"))
-        {
-            transform.position += transform.right * Time.deltaTime * 5f;
-        }
-        
-        if (Input.GetKeyDown("j") && !anim.GetBool("isArmed"))
-        {
-            anim.SetTrigger("jump");
-        }
-
-        if (anim.GetBool("isFishing"))
-        {
-            // TODO: get fish
-        }
-
-        if (anim.GetBool("isArmed") && Input.GetMouseButtonDown(0))
-        {
-            // fire weapon
-            //Debug.Log("firing weapon");
-            fireWeapon();
-        }
-
-        //transform.Translate(Input.GetAxis("Horizontal") * 0.1f, 0, Input.GetAxis("Vertical") * 0.1f);
-
         // https://stackoverflow.com/questions/66644719/how-to-use-transform-forward-that-only-acknowledges-one-axis-of-rotation
         //Vector3 forward = Vector3.Cross(Vector3.up, transform.right) * 10;
         //Debug.DrawRay(transform.position, -forward, Color.green);
     }
+
 }

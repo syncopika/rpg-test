@@ -26,7 +26,12 @@ public class FishController : MonoBehaviour
 
             transform.rotation = Quaternion.LookRotation(newDir);
 
-            transform.position = Vector3.MoveTowards(transform.position, other.transform.position, 0.5f * Time.deltaTime);
+            Debug.Log("other pos: " + other.transform.position.ToString() + ", fish pos: " + transform.position.ToString());
+            //Debug.Log(transform.position);
+            if(Vector3.Distance(transform.position, other.transform.position) > 0.5f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, other.transform.position, 0.7f * Time.deltaTime);
+            }
         }
     }
 

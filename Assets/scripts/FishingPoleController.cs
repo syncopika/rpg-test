@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FishingPoleController : MonoBehaviour
 {
+    public GameObject floater;
+
     LineRenderer fishingLine;
 
     public void toggleFishingLine()
@@ -19,6 +21,6 @@ public class FishingPoleController : MonoBehaviour
 
     void Update()
     {
-        
+        //Debug.Log(floater.transform.position);
     }
 }

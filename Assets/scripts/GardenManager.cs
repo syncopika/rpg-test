@@ -34,6 +34,7 @@ public class GardenManager : MonoBehaviour
             // TODO: need to ensure plant will stay in bounds within the garden-area!
             Vector3 treePos = transform.position + 1.2f * position;
             GameObject tree = Instantiate(treePrefab, treePos, Quaternion.AngleAxis(90, Vector3.left));
+            tree.tag = "obstacle";
             MeshCollider collider = tree.AddComponent<MeshCollider>();
             collider.convex = true;
         }

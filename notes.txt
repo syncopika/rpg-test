@@ -18,6 +18,15 @@ https://answers.unity.com/questions/1399742/dontdestroyonload-duplicating-object
 https://answers.unity.com/questions/987601/when-loading-into-a-new-scene-my-ui-doesnt-work-an.html
   - adding an eventsystem to the interior scene (since it didn't exist already) seemed to get the ui buttons working.
 https://answers.unity.com/questions/622459/set-directionallight-rotation-for-daynight-per-tim.html
+https://stackoverflow.com/questions/34447682/what-is-the-difference-between-update-fixedupdate-in-unity
+
+- terrain + physics is causing my character to turn in different directions sometimes so was exploring collisions
+despite not having physics/isKinematic
+https://forum.unity.com/threads/collision-detection-for-kinematic-rigidbodies.885778/
+https://forum.unity.com/threads/physic-manager-contact-pairs-mode-doesnt-seem-to-make-any-change-2018-1-9f2.562231/
+
+- allow root motion for jumping?
+https://answers.unity.com/questions/766225/turn-off-root-motion-for-a-specific-animation.html
 
 controls:
 p to plant stuff
