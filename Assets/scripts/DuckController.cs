@@ -10,7 +10,6 @@ public class DuckController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other);
         if (other.name.ToLower().Contains("bullet") && health > 0)
         {
             health -= 10;

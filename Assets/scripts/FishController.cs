@@ -13,9 +13,15 @@ public class FishController : MonoBehaviour
     Animator animator;
 
     bool movingTowardsTarget = false;
+    bool hasBite = false;
 
     void OnTriggerStay(Collider other)
     {
+        if (hasBite)
+        {
+            return;
+        }
+
         if (other.transform.name.Equals("floater"))
         {
             // swim towards floater
@@ -32,6 +38,16 @@ public class FishController : MonoBehaviour
             if(Vector3.Distance(transform.position, other.gameObject.transform.position) > 2.5f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, other.gameObject.transform.position, 0.7f * Time.deltaTime);
+            }
+            else
+            {
+                // in range for a bite.
+                // TODO: randomize whether a bite happens or not. e.g. pick a random num, if meets certain criteria make bite happen
+                // assuming bite happens, parent the fish to the floater and trigger flail animation
+                transform.parent = other.transform;
+                hasBite = true;
+                animator.SetBool("isFlail", true);
+                Debug.Log("got a bite");
             }
         }
     }
@@ -58,7 +74,7 @@ public class FishController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!movingTowardsTarget)
+        if (!movingTowardsTarget && !hasBite)
         {
             Vector3 newPos = new Vector3(Mathf.Cos(angle) * radius, transform.position.y, Mathf.Sin(angle) * radius);
             transform.position = new Vector3(position.x + newPos.x, position.y, position.z + newPos.z);
@@ -76,9 +92,5 @@ public class FishController : MonoBehaviour
 
             angle += Time.deltaTime * speed;
         }
-
-        // TODO: if fish gets the floater, it should go from swim->flail
-        // fish should also latch on to floater somehow and be pulled up with floater
-
     }
 }
