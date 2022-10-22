@@ -22,6 +22,11 @@ public class Player : MonoBehaviour
 
     private bool isInFirstPerson;
 
+    public InventoryManager getInventory()
+    {
+        return inventory;
+    }
+
     public Vector3 getForward()
     {
         Vector3 forward = Vector3.Cross(Vector3.up, transform.right);
@@ -31,7 +36,7 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // check if in a zone (e.g. garden or near water for fishing)
-        Debug.Log(other);
+        //Debug.Log(other);
         areaInside = other.name;
         areaInsideObj = other.gameObject;
     }
@@ -307,9 +312,9 @@ public class Player : MonoBehaviour
             Camera.main.transform.GetComponent<PlayerCamera>().toggleInThirdPersonFront();
         }
 
-            // https://stackoverflow.com/questions/66644719/how-to-use-transform-forward-that-only-acknowledges-one-axis-of-rotation
-            //Vector3 forward = Vector3.Cross(Vector3.up, transform.right) * 10;
-            //Debug.DrawRay(transform.position, -forward, Color.green);
-        }
+        // https://stackoverflow.com/questions/66644719/how-to-use-transform-forward-that-only-acknowledges-one-axis-of-rotation
+        //Vector3 forward = Vector3.Cross(Vector3.up, transform.right) * 10;
+        //Debug.DrawRay(transform.position, -forward, Color.green);
+    }
 
 }

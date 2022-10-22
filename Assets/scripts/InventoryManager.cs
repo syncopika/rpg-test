@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -26,6 +27,11 @@ public class InventoryManager : MonoBehaviour
     public string currentlyEquippedObjName()
     {
         return currentlyEquippedName;
+    }
+
+    public List<string> getCurrentInventory()
+    {
+        return inventory.Keys.ToList();
     }
 
     public GameObject equip(string obj)

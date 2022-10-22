@@ -61,7 +61,7 @@ public class GardenManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(transform.name);
+        //Debug.Log(transform.name);
     }
 
     // Update is called once per frame

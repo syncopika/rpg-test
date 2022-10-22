@@ -19,6 +19,7 @@ https://answers.unity.com/questions/987601/when-loading-into-a-new-scene-my-ui-d
   - adding an eventsystem to the interior scene (since it didn't exist already) seemed to get the ui buttons working.
 https://answers.unity.com/questions/622459/set-directionallight-rotation-for-daynight-per-tim.html
 https://stackoverflow.com/questions/34447682/what-is-the-difference-between-update-fixedupdate-in-unity
+https://forum.unity.com/threads/non-hacky-way-to-instantiate-ui-text-objects.269972/
 
 - terrain + physics is causing my character to turn in different directions sometimes so was exploring collisions
 despite not having physics/isKinematic

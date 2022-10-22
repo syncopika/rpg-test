@@ -20,10 +20,10 @@ public class PlayerCamera : MonoBehaviour
 
     private Quaternion rotationBoneRotation; // use this to keep track of current rotation to set to (e.g. when aiming in a certain direction) since we manually change the rotation to override changes from animation
 
-    float distFromCamera = 8.2f;
-    Vector3 cameraPosCorrection = Vector3.zero;
-    string playerCharacterModelIdentifier = "human";
-    bool rotationChanged = false;
+    //float distFromCamera = 8.2f;
+    //Vector3 cameraPosCorrection = Vector3.zero;
+    //string playerCharacterModelIdentifier = "human";
+    //bool rotationChanged = false;
 
     public void toggleFirstPerson()
     {
@@ -64,11 +64,11 @@ public class PlayerCamera : MonoBehaviour
                 if (hit.transform.name.Contains("EnterCottage"))
                 {
                     // enter cottage scene
-                    gameManager.GetComponent<GameManager>().updateStatusWithButtons("enter cottage?", 0);
+                    gameManager.GetComponent<GameManager>().enterCottage();
                 } 
                 else if (hit.transform.name.Contains("ExitCottage"))
                 {
-                    gameManager.GetComponent<GameManager>().updateStatusWithButtons("exit cottage?", 1);
+                    gameManager.GetComponent<GameManager>().exitCottage();
                 }
             }
         }
