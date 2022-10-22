@@ -20,6 +20,37 @@ public class PlayerCamera : MonoBehaviour
 
     private Quaternion rotationBoneRotation; // use this to keep track of current rotation to set to (e.g. when aiming in a certain direction) since we manually change the rotation to override changes from animation
 
+    float distFromCamera = 8.2f;
+    Vector3 cameraPosCorrection = Vector3.zero;
+    string playerCharacterModelIdentifier = "human";
+    bool rotationChanged = false;
+
+    public void toggleFirstPerson()
+    {
+        inFirstPerson = !inFirstPerson;
+
+        if (inFirstPerson && inThirdPersonFront)
+        {
+            transform.rotation = player.transform.rotation; // if going from thirdpersonfront back to first person, correct the rotation
+        }
+
+        inThirdPersonFront = false;
+    }
+
+    public void toggleInThirdPersonFront()
+    {
+        inThirdPersonFront = !inThirdPersonFront;
+        inFirstPerson = false;
+    }
+
+    public void setToPlayerRotation()
+    {
+        transform.rotation = player.transform.rotation;
+        Vector3 rot = transform.localRotation.eulerAngles;
+        rotY = rot.y;
+        rotX = rot.x;
+    }
+
     void shootRay()
     {
         RaycastHit hit;
@@ -30,14 +61,109 @@ public class PlayerCamera : MonoBehaviour
             if (hit.collider != null)
             {
                 Debug.Log("ray hit: " + hit.transform);
-                if (hit.transform.name.ToLower().Contains("door"))
+                if (hit.transform.name.Contains("EnterCottage"))
                 {
                     // enter cottage scene
                     gameManager.GetComponent<GameManager>().updateStatusWithButtons("enter cottage?", 0);
+                } 
+                else if (hit.transform.name.Contains("ExitCottage"))
+                {
+                    gameManager.GetComponent<GameManager>().updateStatusWithButtons("exit cottage?", 1);
                 }
             }
         }
     }
+
+    /* not actually needed anymore but leaving here just in case :)
+    Vector3 getNewCameraPos()
+    {
+        Vector3 playerPos = new Vector3(
+            player.transform.position.x, transform.position.y, player.transform.position.z
+        );
+
+        Vector3 playerForward = player.GetComponent<Player>().getForward();
+        Vector3 newVec = distFromCamera * playerForward;
+        newVec.y = -5f;
+
+        if (cameraPosCorrection != Vector3.zero) // if camera needs correction
+        {
+            // if we're trying to figure out the pos of camera due to obstruction
+            RaycastHit hit;
+            if (Physics.Linecast(transform.position, playerPos, out hit))
+            {
+                if (hit.transform && !hit.transform.name.Contains(playerCharacterModelIdentifier))
+                {
+                    //Debug.Log("trying to correct cam distance");
+                    // keep correcting the camera pos until no more boundary obstruction
+                    cameraPosCorrection += (playerForward * 0.1f);
+
+                    return cameraPosCorrection;
+                }
+            }
+
+            // no more obstruction! yay
+            //Debug.Log("no more obstruction");
+            cameraPosCorrection = Vector3.zero;
+
+            return transform.position; // return current pos
+
+        }
+        else
+        {
+            // TODO: the camera still moves out of bounds sometimes
+            // e.g. when rotating when player is at a boundary
+            // sometimes when player is at a boundary and steps back far enough, the camera bounces to try to correct but never resolves
+
+            // check if current cam position is OK or needs to be corrected
+            // recalculate every time rotation changes? e.g. if rotation changes, set cameraPosCorrection to newDesiredPos
+            Vector3 newDesiredPos = player.transform.position - newVec;
+
+            if (rotationChanged)
+            {
+                cameraPosCorrection = newDesiredPos;
+                rotationChanged = false;
+                //Debug.Log("rotation changed");
+                return cameraPosCorrection;
+            }
+
+            // if we can get to newDesiredPos, then let's do that
+            RaycastHit hit;
+            if (Physics.Linecast(newDesiredPos, playerPos, out hit) && hit.transform.name.Contains(playerCharacterModelIdentifier))
+            {
+                // no obstructions, desired pos OK
+                //Debug.Log("no obstructions found");
+                cameraPosCorrection = Vector3.zero;
+                return newDesiredPos;
+            }
+            else if (Physics.Linecast(newDesiredPos, playerPos, out hit) && !hit.transform.name.Contains(playerCharacterModelIdentifier))
+            {
+                // use hit.transform.position as a starting point but make sure the y axis value matches the camera
+                Vector3 startPos = new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z);
+                cameraPosCorrection = startPos; // start at obstruction pos and correct pos as needed
+                return cameraPosCorrection;
+            }
+            else if (Physics.Linecast(transform.position, playerPos, out hit) && hit.transform.name.Contains(playerCharacterModelIdentifier))
+            {
+                // no obstruction from current cam pos to the player - we've reached a satisfactory distance.
+                // stop correcting camera pos
+                cameraPosCorrection = Vector3.zero;
+                return transform.position;
+            }
+            else if (Physics.Linecast(transform.position, playerPos, out hit) && !hit.transform.name.Contains(playerCharacterModelIdentifier))
+            {
+                //Debug.Log("obstruction found");
+                Vector3 startPos = new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z);
+                cameraPosCorrection = startPos;
+                return cameraPosCorrection;
+            }
+            else
+            {
+                cameraPosCorrection = Vector3.zero;
+                return transform.position;
+            }
+        }
+    }
+    */
 
     // Start is called before the first frame update
     void Start()
@@ -63,32 +189,6 @@ public class PlayerCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            inFirstPerson = !inFirstPerson;
-
-            if (inFirstPerson && inThirdPersonFront)
-            {
-                transform.rotation = player.transform.rotation; // if going from thirdpersonfront back to first person, correct the rotation
-            }
-
-            inThirdPersonFront = false;
-        }
-
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            inThirdPersonFront = !inThirdPersonFront;
-            inFirstPerson = false;
-        }
-
-        if (Input.GetKey("q") || Input.GetKey("e"))
-        {
-            transform.rotation = player.transform.rotation;
-            Vector3 rot = transform.localRotation.eulerAngles;
-            rotY = rot.y;
-            rotX = rot.x;
-        }
-
         Vector3 playerForward = player.GetComponent<Player>().getForward();
 
         if (inThirdPersonFront)
@@ -104,7 +204,6 @@ public class PlayerCamera : MonoBehaviour
                 transform.position = player.transform.position + newVec;
 
             lastPos = transform.position;
-
         }
         else if (!inFirstPerson)
         {
@@ -123,7 +222,7 @@ public class PlayerCamera : MonoBehaviour
             RaycastHit hit;
             if (lastPos != null && Physics.Raycast(currPlayerPos, -playerForward, out hit, Vector3.Distance(currPlayerPos, newPos)))
             {
-                if (hit.transform.name.Equals("Terrain"))
+                if (!hit.transform.name.Contains("human"))
                 {
                     Vector3 correctedNewPos = hit.point + playerForward * 3f;
                     newPos = correctedNewPos;
@@ -144,12 +243,11 @@ public class PlayerCamera : MonoBehaviour
     {
         // need to do this stuff in lateupdate because we're rotating a bone in the player's armature
         // https://forum.unity.com/threads/head-bone-wont-rotate-via-script.442351/
-
         if (inFirstPerson)
         {
             // TODO? in first person mode, make the head invisible - but this would require redoing the model to separate the head from the body so they're separate meshes
 
-            // allow look around with mouse when scope is on
+            // allow look around with mouse
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = -Input.GetAxis("Mouse Y"); // negative so no inversion of axis to mouse move
 
@@ -160,9 +258,6 @@ public class PlayerCamera : MonoBehaviour
 
                 // restrict downward view to 15 degrees
                 rotX = Mathf.Clamp(rotX, -90.0f, 90.0f);
-
-                // also rotY - TODO: this doesn't seem to be working atm
-                rotY = Mathf.Clamp(rotY, rotY - 5f, rotY + 5f);
 
                 // use quaternion to get new rotation
                 Quaternion localRotation = Quaternion.Euler(rotX, rotY, 0.0f);
@@ -186,7 +281,6 @@ public class PlayerCamera : MonoBehaviour
 
             Vector3 headPos = headBone.transform.position;
             Vector3 newCamPos = headPos + (headBone.transform.forward * 0.5f);
-
             newCamPos.y += 0.5f;
 
             transform.position = newCamPos; //new Vector3(headPos.x, headPos.y + .5f, headPos.z);
@@ -194,5 +288,6 @@ public class PlayerCamera : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
                 shootRay();
         }
+
     }
 }

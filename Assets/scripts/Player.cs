@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
 
     private InventoryManager inventory;
 
+    private bool isInFirstPerson;
+
     public Vector3 getForward()
     {
         Vector3 forward = Vector3.Cross(Vector3.up, transform.right);
@@ -106,6 +108,8 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         inventory = GetComponent<InventoryManager>();
+
+        isInFirstPerson = false;
     }
 
     void Update()
@@ -166,13 +170,15 @@ public class Player : MonoBehaviour
 
         // TODO: left/right lean for q and e when armed?
         // let player turn left and right
-        if (Input.GetKey("q") && checkIfCanMove(transform.rotation * (-Vector3.up * Time.deltaTime * 300f)))
+        if (!isInFirstPerson && Input.GetKey("q") && checkIfCanMove(transform.rotation * (-Vector3.up * Time.deltaTime * 300f)))
         {
             transform.Rotate(-Vector3.up * Time.deltaTime * 300f); // rotate counterclockwise about the Y axis
+            Camera.main.transform.GetComponent<PlayerCamera>().setToPlayerRotation();
         }
-        else if (Input.GetKey("e") && checkIfCanMove(transform.rotation * (Vector3.up * Time.deltaTime * 300f)))
+        else if (!isInFirstPerson && Input.GetKey("e") && checkIfCanMove(transform.rotation * (Vector3.up * Time.deltaTime * 300f)))
         {
             transform.Rotate(Vector3.up * Time.deltaTime * 300f);
+            Camera.main.transform.GetComponent<PlayerCamera>().setToPlayerRotation();
         }
 
         // handle movement (no root motion)
@@ -289,9 +295,21 @@ public class Player : MonoBehaviour
             }
         }
 
-        // https://stackoverflow.com/questions/66644719/how-to-use-transform-forward-that-only-acknowledges-one-axis-of-rotation
-        //Vector3 forward = Vector3.Cross(Vector3.up, transform.right) * 10;
-        //Debug.DrawRay(transform.position, -forward, Color.green);
-    }
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            isInFirstPerson = !isInFirstPerson;
+            Camera.main.transform.GetComponent<PlayerCamera>().toggleFirstPerson();
+        }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            isInFirstPerson = false;
+            Camera.main.transform.GetComponent<PlayerCamera>().toggleInThirdPersonFront();
+        }
+
+            // https://stackoverflow.com/questions/66644719/how-to-use-transform-forward-that-only-acknowledges-one-axis-of-rotation
+            //Vector3 forward = Vector3.Cross(Vector3.up, transform.right) * 10;
+            //Debug.DrawRay(transform.position, -forward, Color.green);
+        }
 
 }

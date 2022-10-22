@@ -2686,7 +2686,7 @@ GameObject:
   - component: {fileID: 1305717120}
   - component: {fileID: 1305717119}
   m_Layer: 0
-  m_Name: CottageDoor
+  m_Name: EnterCottage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

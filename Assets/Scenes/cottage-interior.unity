@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 237341550}
   - component: {fileID: 237341549}
   m_Layer: 0
-  m_Name: door
+  m_Name: ExitCottage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -949,6 +949,18 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: ea34abf5ec4e2124baf84bc6ebb3ee41, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43d138c35ae5eab49b40e065ae005fff, type: 3}
+--- !u!1 &992121689 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100034, guid: 43d138c35ae5eab49b40e065ae005fff,
+    type: 3}
+  m_PrefabInstance: {fileID: 992121688}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &992121690 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100004, guid: 43d138c35ae5eab49b40e065ae005fff,
+    type: 3}
+  m_PrefabInstance: {fileID: 992121688}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &997704398 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100316, guid: dff74693a3874e446b861e8e9c3370f1,
@@ -1455,8 +1467,8 @@ GameObject:
   - component: {fileID: 1702081321}
   - component: {fileID: 1702081320}
   - component: {fileID: 1702081319}
-  - component: {fileID: 1702081322}
   - component: {fileID: 1702081323}
+  - component: {fileID: 1702081322}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1535,15 +1547,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1702081318}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: def51ea2fa64aec4396f400b16622978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1533034064}
   gameManager: {fileID: 0}
-  rotationBone: {fileID: 0}
-  headBone: {fileID: 0}
+  rotationBone: {fileID: 992121690}
+  headBone: {fileID: 992121689}
 --- !u!114 &1702081323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1551,7 +1563,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1702081318}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc123a0f7a2e76a4f98ccb830f8aea77, type: 3}
   m_Name: 
