@@ -5,6 +5,7 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
     private bool isDead;
+    private Vector3 forward;
     IEnumerator destroy()
     {
         {
@@ -31,14 +32,17 @@ public class BulletController : MonoBehaviour
     void Start()
     {
         transform.GetComponent<ParticleSystem>().Pause();
+
+        forward = Vector3.Cross(transform.up, transform.forward); // transform.forward isn't really the forward we want
+        forward.Normalize();
     }
 
     void Update()
     {
         if (!isDead)
         {
-            Vector3 forward = Vector3.Cross(transform.up, transform.forward); // transform.forward isn't really the forward we want
-            forward.Normalize();
+            //Vector3 forward = Vector3.Cross(transform.up, transform.forward); // transform.forward isn't really the forward we want
+            //forward.Normalize();
 
             //Debug.DrawRay(transform.position, forward * 10, Color.blue);
             

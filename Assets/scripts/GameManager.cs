@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     {
         // TODO: hide all other canvases except dialogUI
         dialogUI.enabled = true;
+        Cursor.lockState = CursorLockMode.None;
         dialogUiController.updateStatusWithButtons("enter cottage?", 0);
     }
 
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     {
         // TODO: hide all other canvases except dialogUI
         dialogUI.enabled = true;
+        Cursor.lockState = CursorLockMode.None;
         dialogUiController.updateStatusWithButtons("exit cottage?", 1);
     }
 

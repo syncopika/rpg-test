@@ -34,6 +34,15 @@ public class PlayerCamera : MonoBehaviour
             transform.rotation = player.transform.rotation; // if going from thirdpersonfront back to first person, correct the rotation
         }
 
+        if (inFirstPerson)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+
         inThirdPersonFront = false;
     }
 
