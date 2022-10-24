@@ -2,6 +2,9 @@
 https://www.habrador.com/tutorials/rope/2-simplified-rope/ -> super helpful!
 https://www.reddit.com/r/Unity3D/comments/1kx1hp/best_way_to_do_fishing_line/
 
+- kinematics for fishing pole floater?
+https://vilbeyli.github.io/Projectile-Motion-Tutorial-for-Arrows-and-Missiles-in-Unity3D/ (but since I'm using a rope controller that builds the rope and controls the final position of the fishing pole floater, using kinematics won't help in this case)
+
 // cottage model (Grant Abbitt)
 https://www.youtube.com/watch?v=izjz2Hya2QM&list=PLn3ukorJv4vsPA95G7jTHDHixF5FntFm3
 
@@ -30,6 +33,9 @@ https://forum.unity.com/threads/physic-manager-contact-pairs-mode-doesnt-seem-to
 - allow root motion for jumping?
 https://answers.unity.com/questions/766225/turn-off-root-motion-for-a-specific-animation.html
 
+- c# stuff
+https://stackoverflow.com/questions/51526/changing-the-value-of-an-element-in-a-list-of-structs (relevant to RopeController)
+
 controls:
 p to plant stuff
 f to fish
@@ -54,10 +60,9 @@ TODO:
   - be able to eat food
   - climb ladder
 
-- get first-person camera/view working better
-  - add crosshairs? needs to align with mouse cursor
-
-- get fishing working?
+- finish fishing
+  - so far have the basic logic in place - fish sees floater, "bites" floater, got the fishing line changing upon bite
+  - next: some randomization for if the fish decides to bite, what to do when a bite occurs (e.g. catching, failing to catch?)
 
 - maybe a basic inventory menu
 
@@ -68,9 +73,6 @@ TODO:
 - add another cottage? more buildings. animals?
   - add a tavern!
     - have card game minigame inside
-
-- add fps stuff (target practice?)
- - add some barrels/cans that can get knocked over
 
 - try applying animation to only certain bones for certain situations?
   - e.g. running while armed - I want the player to be able to look around while running with animation

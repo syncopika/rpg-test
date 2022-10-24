@@ -47,6 +47,7 @@ public class FishController : MonoBehaviour
                 transform.parent = other.transform;
                 hasBite = true;
                 animator.SetBool("isFlail", true);
+                other.transform.parent.transform.GetComponent<FishingPoleController>().hasBite(); // other.transform is the fishing pole floater
                 Debug.Log("got a bite");
             }
         }

@@ -245,6 +245,7 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKeyDown("f") && anim.GetBool("isIdle"))
             {
+                // play animation for casting the fishing pole
                 anim.SetBool("isFishing", true);
                 inventory.currentlyEquippedObj().transform.GetComponent<FishingPoleController>().toggleFishingLine();
             }

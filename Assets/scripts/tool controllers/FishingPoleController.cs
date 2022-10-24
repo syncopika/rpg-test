@@ -13,6 +13,11 @@ public class FishingPoleController : MonoBehaviour
         fishingLine.enabled = !fishingLine.enabled;
     }
 
+    public void hasBite()
+    {
+        transform.GetComponent<RopeControllerRealisticNoSpring>().toggleHasBite();
+    }
+
     void Start()
     {
         fishingLine = transform.GetComponent<LineRenderer>();

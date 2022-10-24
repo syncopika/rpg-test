@@ -17,11 +17,14 @@ public class BulletController : MonoBehaviour
     void checkCollision(Vector3 forward)
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, forward, out hit, 1))
+        if (Physics.Raycast(transform.position, forward, out hit, 0.5f))
         {
             if (hit.transform)
             {
                 transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                //transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                //transform.GetComponent<Rigidbody>().isKinematic = true;
+
                 transform.GetComponent<ParticleSystem>().Play();
                 StartCoroutine(destroy());
                 isDead = true;
@@ -41,12 +44,14 @@ public class BulletController : MonoBehaviour
     {
         if (!isDead)
         {
-            //Vector3 forward = Vector3.Cross(transform.up, transform.forward); // transform.forward isn't really the forward we want
-            //forward.Normalize();
-
-            //Debug.DrawRay(transform.position, forward * 10, Color.blue);
-            
             checkCollision(forward);
+
+            if(transform.position.y <= 0)
+            {
+                Destroy(this.gameObject);
+            }
         }
+
+        //Debug.DrawRay(transform.position, forward, Color.red);
     }
 }

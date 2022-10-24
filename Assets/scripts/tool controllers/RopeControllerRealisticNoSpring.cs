@@ -1,4 +1,5 @@
-﻿// https://www.habrador.com/tutorials/rope/3-another-simplified-rope/
+﻿// from https://www.habrador.com/tutorials/rope/3-another-simplified-rope/
+// comments with 'edit: ' are mine
 
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +20,15 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
 
     //Rope data
     private float ropeSectionLength = 0.5f;
+
+    // my own stuff for use with fishing pole
+    int alternate = -1;
+    bool hasBite = false;
+
+    public void toggleHasBite()
+    {
+        hasBite = !hasBite;
+    }
 
     private void Start()
     {
@@ -67,7 +77,6 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
         firstRopeSection.pos = whatTheRopeIsConnectedTo.position;
 
         allRopeSections[0] = firstRopeSection;
-
 
         //Move the other rope sections with Verlet integration
         for (int i = 1; i < allRopeSections.Count; i++)
@@ -131,7 +140,6 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
                 continue;
             }
 
-
             Vector3 change = changeDir * distError;
 
             if (i != 0)
@@ -152,6 +160,10 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
                 allRopeSections[i + 1] = bottomSection;
             }
         }
+
+        //edit: extend the line a bit more (relevant to fishing pole when casting) since this rope controller controls the floater position of the fishing pole
+        RopeSection last = allRopeSections[allRopeSections.Count - 1];
+        allRopeSections[allRopeSections.Count - 1] = new RopeSection(new Vector3(last.pos.x - 0.3f, last.pos.y - 0.25f, last.pos.z - 0.2f));
     }
 
     //Display the rope with a line renderer
@@ -162,7 +174,7 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
         lineRenderer.startWidth = ropeWidth;
         lineRenderer.endWidth = ropeWidth;
 
-        // https://stackoverflow.com/questions/72240485/how-to-add-the-default-line-material-back-to-the-linerenderer-material
+        //edit: https://stackoverflow.com/questions/72240485/how-to-add-the-default-line-material-back-to-the-linerenderer-material
         lineRenderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
 
         //An array with all rope section positions
@@ -170,7 +182,16 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
 
         for (int i = 0; i < allRopeSections.Count; i++)
         {
-            positions[i] = allRopeSections[i].pos;
+            RopeSection curr = allRopeSections[i];
+
+            // edit: wiggle the rope
+            if (hasBite && i > 0)
+            {
+                curr.pos += new Vector3(0.6f * alternate, 0, 0);
+                alternate *= -1;
+            }
+
+            positions[i] = curr.pos; //allRopeSections[i].pos;
         }
 
         lineRenderer.positionCount = positions.Length;
