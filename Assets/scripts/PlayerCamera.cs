@@ -64,6 +64,7 @@ public class PlayerCamera : MonoBehaviour
     {
         RaycastHit hit;
         Ray r = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        GameManager gm = gameManager.GetComponent<GameManager>();
 
         if (Physics.Raycast(r, out hit))
         {
@@ -72,12 +73,17 @@ public class PlayerCamera : MonoBehaviour
                 Debug.Log("ray hit: " + hit.transform);
                 if (hit.transform.name.Contains("EnterCottage"))
                 {
-                    // enter cottage scene
-                    gameManager.GetComponent<GameManager>().enterCottage();
+                    gm.enterCottage();
                 } 
                 else if (hit.transform.name.Contains("ExitCottage"))
                 {
-                    gameManager.GetComponent<GameManager>().exitCottage();
+                    gm.exitCottage();
+                }
+                else if (hit.transform.name.Contains("book-animated"))
+                {
+                    // opening/closing a book
+                    Animator bookAnimator = hit.transform.GetComponent<Animator>();
+                    bookAnimator.SetBool("isOpen", !bookAnimator.GetBool("isOpen"));
                 }
             }
         }

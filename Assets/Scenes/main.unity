@@ -8655,7 +8655,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &1961189641
 RectTransform:
@@ -8995,7 +8995,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!224 &1514449892027059679
 RectTransform:
@@ -9095,6 +9095,7 @@ MonoBehaviour:
   yesButton: {fileID: 1514449892978873953}
   noButton: {fileID: 1514449893452411154}
   statusText: {fileID: 1514449893185737281}
+  gameManager: {fileID: 78363282}
 --- !u!114 &1514449892514068596
 MonoBehaviour:
   m_ObjectHideFlags: 0

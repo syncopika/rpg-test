@@ -10,6 +10,7 @@ public class DialogUIController : MonoBehaviour
     public Button yesButton;
     public Button noButton;
     public Text statusText;
+    public GameManager gameManager;
 
     Image canvasBackground;
 
@@ -40,6 +41,8 @@ public class DialogUIController : MonoBehaviour
         // ideally to be used when switching scenes
         setStatus(newStatus);
         showButtons();
+
+        yesButton.onClick.RemoveAllListeners();
 
         // TODO: maybe pass another arg to indicate what to do if yes button is pressed?
         if (state == 0)
@@ -76,25 +79,25 @@ public class DialogUIController : MonoBehaviour
         yesButton.onClick.AddListener(enterCottage);
     }
 
+    void clickYesToEnterWorldMap()
+    {
+        yesButton.onClick.AddListener(enterWorld);
+    }
+
     void enterCottage()
     {
         hideButtons();
         clearStatus();
+        gameManager.crosshairs.enabled = false; // turn off crosshairs before changing scene b/c atm, the player defaults to 3rd person on scene load
         SceneManager.LoadScene("cottage-interior");
-        yesButton.onClick.RemoveAllListeners();
     }
 
     void enterWorld()
     {
         hideButtons();
         clearStatus();
+        gameManager.crosshairs.enabled = false; // turn off crosshairs before changing scene b/c atm, the player defaults to 3rd person on scene load
         SceneManager.LoadScene("main");
-        yesButton.onClick.RemoveAllListeners();
-    }
-
-    void clickYesToEnterWorldMap()
-    {
-        yesButton.onClick.AddListener(enterWorld);
     }
 
     // Start is called before the first frame update
