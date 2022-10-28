@@ -36,6 +36,12 @@ public class InventoryManager : MonoBehaviour
 
     public GameObject equip(string obj)
     {
+        // if currentlyEquippedName == obj, de-equip it
+        if (currentlyEquippedName.Equals(obj))
+        {
+            obj = "";
+        }
+
         // deactivate current object
         if (currentlyEquipped != null) currentlyEquipped.SetActive(false);
 
@@ -76,7 +82,5 @@ public class InventoryManager : MonoBehaviour
             equip("wateringCan");
         else if (Input.GetKeyUp("5"))
             equip("fishingPole");
-        else if (Input.GetKeyUp("6"))
-            equip(""); // put away current item
     }
 }

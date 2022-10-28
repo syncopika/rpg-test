@@ -8,16 +8,12 @@ public class GameManager : MonoBehaviour
     public Canvas dialogUI; // show buttons fr entering/exiting scenes
     public Canvas inventoryUI;
     public Canvas crosshairs;
+    public Canvas controlUI;
 
     private DialogUIController dialogUiController;
     private InventoryUIController inventoryUiController;
 
     static GameManager gmInstance;
-
-    public void toggleCrosshairs()
-    {
-        crosshairs.enabled = !crosshairs.enabled;
-    }
 
     public void enterCottage()
     {
@@ -36,24 +32,29 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dialogUI.enabled = false;
         dialogUiController = dialogUI.GetComponent<DialogUIController>();
-
         inventoryUiController = inventoryUI.GetComponent<InventoryUIController>();
 
+        dialogUI.enabled = false;
         crosshairs.enabled = false;
+        controlUI.enabled = false;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown("m"))
+        if (Input.GetKeyDown("i"))
         {
             inventoryUiController.toggleInventoryMenu();
         }
 
+        if (Input.GetKeyDown("m"))
+        {
+            controlUI.enabled = !controlUI.enabled;
+        }
+
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            toggleCrosshairs();
+            crosshairs.enabled = !crosshairs.enabled;
         }
 
         if (Input.GetKeyDown(KeyCode.F2))
