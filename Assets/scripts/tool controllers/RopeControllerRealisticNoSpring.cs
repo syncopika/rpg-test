@@ -24,10 +24,16 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
     // my own stuff for use with fishing pole
     int alternate = -1;
     bool hasBite = false;
+    Vector3 floaterPos = Vector3.zero;
 
     public void toggleHasBite()
     {
         hasBite = !hasBite;
+    }
+
+    public void setFloaterPos(Vector3 pos)
+    {
+        floaterPos = pos;
     }
 
     private void Start()
@@ -53,6 +59,11 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
         DisplayRope();
 
         //Move what is hanging from the rope to the end of the rope
+        if (!floaterPos.Equals(Vector3.zero))
+        {
+            allRopeSections[allRopeSections.Count - 1] = new RopeSection(floaterPos);
+        }
+
         whatIsHangingFromTheRope.position = allRopeSections[allRopeSections.Count - 1].pos;
 
         //Make what's hanging from the rope look at the next to last rope position to make it rotate with the rope
@@ -185,6 +196,7 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
             RopeSection curr = allRopeSections[i];
 
             // edit: wiggle the rope
+            // TODO: actually make it wiggle
             if (hasBite && i > 0)
             {
                 curr.pos += new Vector3(0.6f * alternate, 0, 0);

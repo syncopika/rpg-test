@@ -255,7 +255,8 @@ public class Player : MonoBehaviour
 
                 // TODO? wait until animation is finished before disabling line renderer for fishing line
                 // https://answers.unity.com/questions/426266/how-to-wait-until-an-animation-is-finished.html
-                inventory.currentlyEquippedObj().transform.GetComponent<FishingPoleController>().toggleFishingLine();
+                //inventory.currentlyEquippedObj().transform.GetComponent<FishingPoleController>().toggleFishingLine();
+                inventory.currentlyEquippedObj().transform.GetComponent<FishingPoleController>().resetFishingPole();
             }
         }
 

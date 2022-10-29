@@ -9,11 +9,20 @@ public class FishController : MonoBehaviour
     float speed = 0.2f;
 
     Vector3 position;
+    Quaternion rotation;
 
     Animator animator;
 
     bool movingTowardsTarget = false;
     bool hasBite = false;
+
+    public void resetFish()
+    {
+        hasBite = false;
+        movingTowardsTarget = false;
+        transform.parent.DetachChildren();
+        animator.SetBool("isFlail", false);
+    }
 
     void OnTriggerStay(Collider other)
     {
@@ -47,7 +56,8 @@ public class FishController : MonoBehaviour
                 transform.parent = other.transform;
                 hasBite = true;
                 animator.SetBool("isFlail", true);
-                other.transform.parent.transform.GetComponent<FishingPoleController>().hasBite(); // other.transform is the fishing pole floater
+                other.transform.parent.transform.GetComponent<FishingPoleController>().bite(); // other.transform is the fishing pole floater
+                other.transform.parent.transform.GetComponent<FishingPoleController>().registerHookedFish(transform);
                 Debug.Log("got a bite");
             }
         }

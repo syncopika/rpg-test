@@ -9,7 +9,9 @@ public class GardenManager : MonoBehaviour
 
     // TODO: more variables for planting seeds
     // growing stuff, collecting produce, etc?
-    public Material gardenIsPrepped; // material for when garden is prepared to be used
+    //public Material gardenIsPrepped; // material for when garden is prepared to be used
+
+    public GameObject tilledSoil;
 
     public GameObject treePrefab;
 
@@ -47,14 +49,12 @@ public class GardenManager : MonoBehaviour
 
     private void evaluateState()
     {
-        if(requiredShovelings == 0 && requiredRakings == 0)
+        if(requiredShovelings <= 0 && requiredRakings <= 0)
         {
             // change the garden state
             Debug.Log("changing garden state");
 
-            // for now, add a new texture to represent a state change
-            transform.GetComponent<MeshRenderer>().enabled = true;
-            transform.GetComponent<MeshRenderer>().material = gardenIsPrepped;
+            tilledSoil.transform.GetComponent<MeshRenderer>().enabled = true;
         }
     }
 
@@ -62,6 +62,7 @@ public class GardenManager : MonoBehaviour
     void Start()
     {
         //Debug.Log(transform.name);
+        tilledSoil.transform.GetComponent<MeshRenderer>().enabled = false;
     }
 
     // Update is called once per frame
