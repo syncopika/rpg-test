@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -13,8 +14,8 @@ public class InventoryManager : MonoBehaviour
     public GameObject rake;
     public GameObject wateringCan;
 
-    private GameObject currentlyEquipped;
-    private string currentlyEquippedName;
+    private GameObject currentlyEquipped = null;
+    private string currentlyEquippedName = "";
 
     private Dictionary<string, GameObject> inventory = new Dictionary<string, GameObject>();
 
@@ -28,8 +29,19 @@ public class InventoryManager : MonoBehaviour
         return currentlyEquippedName;
     }
 
+    public List<string> getCurrentInventory()
+    {
+        return inventory.Keys.ToList();
+    }
+
     public GameObject equip(string obj)
     {
+        // if currentlyEquippedName == obj, de-equip it
+        if (currentlyEquippedName.Equals(obj))
+        {
+            obj = "";
+        }
+
         // deactivate current object
         if (currentlyEquipped != null) currentlyEquipped.SetActive(false);
 
@@ -48,8 +60,6 @@ public class InventoryManager : MonoBehaviour
         return null;
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         inventory["fishingPole"] = fishingPole;
@@ -59,28 +69,18 @@ public class InventoryManager : MonoBehaviour
         inventory["wateringCan"] = wateringCan;
     }
 
-    // Update is called once per frame
     void Update()
     {
         // use numpad for toggling between objects
         if (Input.GetKeyUp("1"))
-        {
             equip("rifle");
-        }
         else if (Input.GetKeyUp("2"))
-        {
             equip("shovel");
-        }
         else if (Input.GetKeyUp("3"))
-        {
             equip("rake");
-        }
         else if (Input.GetKeyUp("4"))
-        {
-            equip(""); // put away current item
-        }
+            equip("wateringCan");
         else if (Input.GetKeyUp("5"))
-        {
-        }
+            equip("fishingPole");
     }
 }

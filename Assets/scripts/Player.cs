@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// kinematic, non-physics
 public class Player : MonoBehaviour
 {
     private Rigidbody rb;
@@ -14,7 +15,17 @@ public class Player : MonoBehaviour
     public GameObject bulletEmitter;
     public GameObject bulletPrefab;
 
+    // for detecting distance between player model and terrain/ground
+    public GameObject baselineObj;
+
     private InventoryManager inventory;
+
+    private bool isInFirstPerson;
+
+    public InventoryManager getInventory()
+    {
+        return inventory;
+    }
 
     public Vector3 getForward()
     {
@@ -25,7 +36,7 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // check if in a zone (e.g. garden or near water for fishing)
-        Debug.Log(other);
+        //Debug.Log(other);
         areaInside = other.name;
         areaInsideObj = other.gameObject;
     }
@@ -34,6 +45,20 @@ public class Player : MonoBehaviour
     {
         areaInside = "";
         areaInsideObj = null;
+    }
+
+    private bool checkIfCanMove(Vector3 dir)
+    {
+        RaycastHit hit;
+        if(rb.SweepTest(dir, out hit, 1.0f))
+        {
+            if (hit.transform.tag.Equals("obstacle"))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private bool isInGarden()
@@ -61,28 +86,44 @@ public class Player : MonoBehaviour
         bullet.GetComponent<Rigidbody>().AddForce(forward * 20f, ForceMode.Impulse);
     }
 
-    // Start is called before the first frame update
+    private void adjustVerticalHeightBasedOnTerrain()
+    {
+        RaycastHit hit;
+
+        // avoid water, which is layer 4
+        // https://docs.unity3d.com/Manual/use-layers.html
+        int waterLayer = 1 << 4;
+
+        waterLayer = ~waterLayer;
+
+        if(Physics.Raycast(baselineObj.transform.position, -Vector3.up, out hit, 15.0f, waterLayer))
+        {
+            if (hit.transform.name.Equals("Terrain"))
+            {
+                //Debug.Log("distance to terrain: " + hit.distance);
+                //Debug.Log("hit pos y: " + hit.point.y + ", curr pos y: " + transform.position.y);
+                transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+            }
+        }
+
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
-        inventory = GetComponent<InventoryManager>(); 
+        inventory = GetComponent<InventoryManager>();
+
+        isInFirstPerson = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // let player turn left and right
-        if (Input.GetKey("q"))
-        {
-            transform.Rotate(-Vector3.up * Time.deltaTime * 300f); // rotate counterclockwise about the Y axis
-        }
-        else if (Input.GetKey("e"))
-        {
-            transform.Rotate(Vector3.up * Time.deltaTime * 300f);
-        }
+        adjustVerticalHeightBasedOnTerrain();
 
-        // handle animation toggling
+        // all the key presses in this if/else if block
+        // are associated with actions that shouldn't be activated
+        // simultaneously with another
         if (Input.GetKeyDown("w"))
         {
             anim.SetBool("isIdle", false);
@@ -96,27 +137,23 @@ public class Player : MonoBehaviour
         }
         else if (Input.GetKeyDown("a"))
         {
-            // isWalkSide
             anim.SetBool("isIdle", false);
             anim.SetBool("isWalkSide", true);
             anim.SetFloat("direction", -1f);
         }
         else if (Input.GetKeyUp("a"))
         {
-            // back to idle
             anim.SetBool("isIdle", true);
             anim.SetBool("isWalkSide", false);
         }
         else if (Input.GetKeyDown("d"))
         {
-            // isWalkSide = true
             anim.SetBool("isIdle", false);
             anim.SetBool("isWalkSide", true);
             anim.SetFloat("direction", 1f);
         }
         else if (Input.GetKeyUp("d"))
         {
-            // back to idle
             anim.SetBool("isIdle", true);
             anim.SetBool("isWalkSide", false);
         }
@@ -135,40 +172,100 @@ public class Player : MonoBehaviour
             anim.SetBool("isIdle", true);
             anim.SetBool("isWalk", false);
         }
-        else if (Input.GetKeyDown(KeyCode.LeftShift))
+
+        // TODO: left/right lean for q and e when armed?
+        // let player turn left and right
+        if (!isInFirstPerson && Input.GetKey("q") && checkIfCanMove(transform.rotation * (-Vector3.up * Time.deltaTime * 300f)))
         {
-            // use shift to toggle running
-            anim.SetBool("isRun", true);
+            transform.Rotate(-Vector3.up * Time.deltaTime * 300f); // rotate counterclockwise about the Y axis
+            Camera.main.transform.GetComponent<PlayerCamera>().setToPlayerRotation();
         }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        else if (!isInFirstPerson && Input.GetKey("e") && checkIfCanMove(transform.rotation * (Vector3.up * Time.deltaTime * 300f)))
         {
-            anim.SetBool("isRun", false);
+            transform.Rotate(Vector3.up * Time.deltaTime * 300f);
+            Camera.main.transform.GetComponent<PlayerCamera>().setToPlayerRotation();
         }
 
-        // fishing - TODO: only allow if fishing pole equipped
-        if (isNextToWater())
+        // handle movement (no root motion)
+        if (Input.GetKey("w") && checkIfCanMove(transform.forward))
         {
-            if (Input.GetKeyDown("f"))
+            if (anim.GetBool("isRun"))
+                transform.position += transform.forward * Time.deltaTime * 9f;
+            else
+                transform.position += transform.forward * Time.deltaTime * 5f;
+        }
+        else if (Input.GetKey("s") && checkIfCanMove(-transform.forward))
+        {
+            if (anim.GetBool("isRun"))
+                transform.position -= transform.forward * Time.deltaTime * 9f;
+            else
+                transform.position -= transform.forward * Time.deltaTime * 5f;
+        }
+        else if (Input.GetKey("a") && checkIfCanMove(-transform.right))
+        {
+            transform.position -= transform.right * Time.deltaTime * 5f;
+        }
+        else if (Input.GetKey("d") && checkIfCanMove(transform.right))
+        {
+            transform.position += transform.right * Time.deltaTime * 5f;
+        }
+
+        if (Input.GetKeyDown("j") && !anim.GetBool("isArmed"))
+        {
+            // allow root motion for jumping? https://answers.unity.com/questions/766225/turn-off-root-motion-for-a-specific-animation.html
+            anim.SetTrigger("jump");
+        }
+
+        if (anim.GetBool("isFishing"))
+        {
+            // TODO: get fish
+        }
+
+        if (anim.GetBool("isArmed") && Input.GetMouseButtonDown(0))
+        {
+            // fire weapon
+            fireWeapon();
+        }
+
+        if (Input.GetKeyUp("u") && anim.GetBool("isIdle"))
+        {
+            if (anim.GetBool("isArmed"))
+                anim.SetBool("isArmed", false);
+            else
+                anim.SetBool("isArmed", true);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            anim.SetBool("isRun", true);
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+            anim.SetBool("isRun", false);
+
+        // fishing
+        if (isNextToWater() && inventory.currentlyEquippedObjName().Equals("fishingPole"))
+        {
+            if (Input.GetKeyDown("f") && anim.GetBool("isIdle"))
             {
+                // play animation for casting the fishing pole
                 anim.SetBool("isFishing", true);
+                inventory.currentlyEquippedObj().transform.GetComponent<FishingPoleController>().toggleFishingLine();
             }
             else if (Input.GetKeyUp("f"))
             {
                 anim.SetBool("isFishing", false);
+
+                // TODO? wait until animation is finished before disabling line renderer for fishing line
+                // https://answers.unity.com/questions/426266/how-to-wait-until-an-animation-is-finished.html
+                inventory.currentlyEquippedObj().transform.GetComponent<FishingPoleController>().resetFishingPole();
             }
         }
 
         if (isInGarden() && !anim.GetBool("isArmed"))
         {
-            // watering plants - TODO: only allow if watering can equipped
-            if (Input.GetKeyDown("c"))
-            {
+            // watering plants
+            if (Input.GetKeyDown("c") && inventory.currentlyEquippedObjName().Equals("wateringCan"))
                 anim.SetBool("isWateringPlants", true);
-            }
             else if (Input.GetKeyUp("c"))
-            {
                 anim.SetBool("isWateringPlants", false);
-            }
 
             // planting seeds
             else if (Input.GetKeyDown("p"))
@@ -204,72 +301,21 @@ public class Player : MonoBehaviour
             }
         }
 
-        // handle movement (no root motion)
-        if (Input.GetKey("w"))
+        if (Input.GetKeyDown(KeyCode.F1))
         {
-            if (anim.GetBool("isRun"))
-            {
-                transform.position += transform.forward * Time.deltaTime * 9f;
-                //rb.AddForce(transform.forward * Time.deltaTime * 30f);
-            }
-            else 
-            {
-                transform.position += transform.forward * Time.deltaTime * 5f;
-                //rb.velocity = (transform.forward * 5f);
-            }
-        }else if (Input.GetKey("s"))
-        {
-            if (anim.GetBool("isRun"))
-            {
-                transform.position -= transform.forward * Time.deltaTime * 9f;
-            }
-            else
-            {
-                transform.position -= transform.forward * Time.deltaTime * 5f;
-            }
-        }
-        else if (Input.GetKey("a"))
-        {
-            transform.position -= transform.right * Time.deltaTime * 5f;
-        }
-        else if (Input.GetKey("d"))
-        {
-            transform.position += transform.right * Time.deltaTime * 5f;
-        }
-        
-        if (Input.GetKeyDown("j"))
-        {
-            anim.SetTrigger("jump");
+            isInFirstPerson = !isInFirstPerson;
+            Camera.main.transform.GetComponent<PlayerCamera>().toggleFirstPerson();
         }
 
-        if (Input.GetKeyDown("u"))
+        if (Input.GetKeyDown(KeyCode.F2))
         {
-            if (anim.GetBool("isArmed"))
-            {
-                anim.SetBool("isArmed", false);
-            }
-            else
-            {
-                anim.SetBool("isArmed", true);
-            }
+            isInFirstPerson = false;
+            Camera.main.transform.GetComponent<PlayerCamera>().toggleInThirdPersonFront();
         }
-
-        if (anim.GetBool("isFishing"))
-        {
-            // TODO: get fish
-        }
-
-        if(anim.GetBool("isArmed") && Input.GetMouseButtonDown(0))
-        {
-            // fire weapon
-            Debug.Log("firing weapon");
-            fireWeapon();
-        }
-
-        //transform.Translate(Input.GetAxis("Horizontal") * 0.1f, 0, Input.GetAxis("Vertical") * 0.1f);
 
         // https://stackoverflow.com/questions/66644719/how-to-use-transform-forward-that-only-acknowledges-one-axis-of-rotation
         //Vector3 forward = Vector3.Cross(Vector3.up, transform.right) * 10;
         //Debug.DrawRay(transform.position, -forward, Color.green);
     }
+
 }

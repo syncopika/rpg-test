@@ -1,0 +1,12 @@
+blender notes
+
+for low-poly animals:
+- find an image (side view works really well)
+- use a plane + xray view (alt + z) and extrude the edges + scale/extend them to basically create a 2d covering over the shape of the animal's image
+- once you have the general 2d shape you can add a mirror modifier to only have to work on one side of the animal.
+- extrude the 2d shape to expand it and add more detail with loop cuts. using i for inset might be helpful too.
+
+for trees:
+- use the sapling tree gen add-on
+- to export to fbx, make sure to convert the trunk, which is a curve, to a mesh. in object mode -> right-click -> there should
+be an option to convert to mesh. converting the curve to mesh will also allow for texturing.
