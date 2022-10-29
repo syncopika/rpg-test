@@ -1,45 +1,65 @@
 fileFormatVersion: 2
-guid: e79c1feb411a9d94fa7dcb1a2efe6c2e
+guid: 1973dd18cdce6db429b06d373c2330b7
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Cube.054
-    100004: Plane.007
-    100006: Plane.009
-    100008: Plane.010
-    100010: Plane.011
+    100002: Cube.531
+    100004: Cube.537
+    100006: Cube.538
+    100008: Cube.539
+    100010: Cube.540
+    100012: Cube.541
+    100014: Cube.542
+    100016: Cube.543
+    100018: Cube.544
     400000: //RootNode
-    400002: Cube.054
-    400004: Plane.007
-    400006: Plane.009
-    400008: Plane.010
-    400010: Plane.011
-    2100000: No Name
-    2100002: Brick2
-    2100004: Wood
-    2100006: Brick1
-    2100008: roofTile
+    400002: Cube.531
+    400004: Cube.537
+    400006: Cube.538
+    400008: Cube.539
+    400010: Cube.540
+    400012: Cube.541
+    400014: Cube.542
+    400016: Cube.543
+    400018: Cube.544
+    2100000: Wood
+    2100002: Brick1
+    2100004: cottage_top
+    2100006: cottage_bottom
+    2100008: Brick2
     2100010: door_wood
-    2100012: cottage_bottom
-    2100014: roof
-    2100016: cottage_top
-    2100018: Chimney
-    2300000: Cube.054
-    2300002: Plane.007
-    2300004: Plane.009
-    2300006: Plane.010
-    2300008: Plane.011
-    3300000: Cube.054
-    3300002: Plane.007
-    3300004: Plane.009
-    3300006: Plane.010
-    3300008: Plane.011
-    4300000: Plane.007
-    4300002: Plane.009
-    4300004: Cube.054
-    4300006: Plane.010
-    4300008: Plane.011
+    2100012: roof
+    2100014: roofTile
+    2100016: Chimney
+    2100018: No Name
+    2300000: Cube.531
+    2300002: Cube.537
+    2300004: Cube.538
+    2300006: Cube.539
+    2300008: Cube.540
+    2300010: Cube.541
+    2300012: Cube.542
+    2300014: Cube.543
+    2300016: Cube.544
+    3300000: Cube.531
+    3300002: Cube.537
+    3300004: Cube.538
+    3300006: Cube.539
+    3300008: Cube.540
+    3300010: Cube.541
+    3300012: Cube.542
+    3300014: Cube.543
+    3300016: Cube.544
+    4300000: Cube.531
+    4300002: Cube.537
+    4300004: Cube.538
+    4300006: Cube.539
+    4300008: Cube.540
+    4300010: Cube.541
+    4300012: Cube.542
+    4300014: Cube.543
+    4300016: Cube.544
   externalObjects: {}
   materials:
     importMaterials: 1

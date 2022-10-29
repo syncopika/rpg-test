@@ -60,8 +60,8 @@ public class FishingPoleController : MonoBehaviour
     {
         if (hasBite)
         {
-            // TODO: move the floater up and down quickly
-            transform.GetComponent<RopeControllerRealisticNoSpring>().setFloaterPos(new Vector3(floater.position.x, floaterPositionOnBite.y + (Mathf.Cos(Time.deltaTime * 5f)), floater.position.z));
+            float oscillationSpeed = 8.0f;
+            transform.GetComponent<RopeControllerRealisticNoSpring>().setFloaterPos(new Vector3(floater.position.x, floaterPositionOnBite.y + 2.0f*Mathf.Cos(oscillationSpeed * Time.time), floater.position.z));
         }
     }
 

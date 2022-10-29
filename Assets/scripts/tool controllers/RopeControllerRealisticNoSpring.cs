@@ -173,8 +173,9 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
         }
 
         //edit: extend the line a bit more (relevant to fishing pole when casting) since this rope controller controls the floater position of the fishing pole
+        // TODO: right now the position of the last segment is pretty arbitrary - use the player's forward vector instead to figure out position?
         RopeSection last = allRopeSections[allRopeSections.Count - 1];
-        allRopeSections[allRopeSections.Count - 1] = new RopeSection(new Vector3(last.pos.x - 0.3f, last.pos.y - 0.25f, last.pos.z - 0.2f));
+        allRopeSections[allRopeSections.Count - 1] = new RopeSection(new Vector3(last.pos.x - 0.1f, last.pos.y - 0.25f, last.pos.z - 0.3f));
     }
 
     //Display the rope with a line renderer
