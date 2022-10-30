@@ -187,7 +187,8 @@ public class RopeControllerRealisticNoSpring : MonoBehaviour
         lineRenderer.endWidth = ropeWidth;
 
         //edit: https://stackoverflow.com/questions/72240485/how-to-add-the-default-line-material-back-to-the-linerenderer-material
-        lineRenderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
+        // TODO: figure out how to include shader with build
+        //lineRenderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
 
         //An array with all rope section positions
         Vector3[] positions = new Vector3[allRopeSections.Count];
