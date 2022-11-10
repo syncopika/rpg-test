@@ -38,7 +38,10 @@ public class DialogUIController : MonoBehaviour
     // TODO: use an enum for state
     public void updateStatusWithButtons(string newStatus, int state)
     {
-        // ideally to be used when switching scenes
+        // assuming first-person so unlock cursor so player can click on buttons
+        Cursor.lockState = CursorLockMode.None;
+
+        // ideally to be used to display buttons (e.g. yes/no) to allow player to traverse scenes
         setStatus(newStatus);
         showButtons();
 
@@ -72,6 +75,9 @@ public class DialogUIController : MonoBehaviour
     {
         statusText.text = "";
         hideButtons();
+
+        // assuming first-person so lock cursor again after no is selected
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void clickYesToEnterCottage()

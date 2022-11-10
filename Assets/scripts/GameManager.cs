@@ -18,14 +18,12 @@ public class GameManager : MonoBehaviour
     public void enterCottage()
     {
         dialogUI.enabled = true;
-        Cursor.lockState = CursorLockMode.None;
         dialogUiController.updateStatusWithButtons("enter cottage?", 0);
     }
 
     public void exitCottage()
     {
         dialogUI.enabled = true;
-        Cursor.lockState = CursorLockMode.None;
         dialogUiController.updateStatusWithButtons("exit cottage?", 1);
     }
 
