@@ -1040,6 +1040,7 @@ GameObject:
   - component: {fileID: 534669904}
   - component: {fileID: 534669903}
   - component: {fileID: 534669906}
+  - component: {fileID: 534669907}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1127,6 +1128,19 @@ MonoBehaviour:
   gameManager: {fileID: 78363280}
   rotationBone: {fileID: 560844597}
   headBone: {fileID: 798446491}
+--- !u!114 &534669907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534669902}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5340314d3c1437546888b7b2755ac3f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toFollow: {fileID: 558755791}
 --- !u!1 &558755791 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: fe3445bdd5366c240ba8a5c94f375b74,
@@ -1176,6 +1190,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propeller: {fileID: 1761395106}
+  player: {fileID: 829673805}
+  cam: {fileID: 534669904}
 --- !u!135 &558755798
 SphereCollider:
   m_ObjectHideFlags: 0
