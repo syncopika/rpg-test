@@ -7,6 +7,10 @@ public class BiplaneController : MonoBehaviour
 {
     bool playerInRange = false;
     bool isFlying = false;
+    bool isLevel = false;
+
+    Quaternion initialRotation = Quaternion.identity;
+    Quaternion levelRotation = Quaternion.identity; // the biplane is leveled with the ground - should have this rotation when taking off and landing (it's pointing upwards slightly on the ground when static)
 
     public GameObject propeller;
     public GameObject player;
@@ -28,7 +32,7 @@ public class BiplaneController : MonoBehaviour
             {
                 // get in plane
                 // disable player controller
-                Debug.Log("get in plane");
+                //Debug.Log("get in plane");
                 player.GetComponent<Player>().enabled = false;
                 isFlying = true;
                 cam.GetComponent<BiplaneCameraController>().enabled = true;
@@ -39,8 +43,11 @@ public class BiplaneController : MonoBehaviour
         {
             if (Input.GetKeyUp("r"))
             {
-                Debug.Log("get out of plane");
-                // get out of plane 
+                //Debug.Log("get out of plane");
+                // get out of plane
+
+                transform.GetComponent<Rigidbody>().useGravity = true;
+
                 // enable player controller
                 player.GetComponent<Player>().enabled = true;
                 isFlying = false;
@@ -52,21 +59,52 @@ public class BiplaneController : MonoBehaviour
             
             if (Input.GetKey(KeyCode.W))
             {
-                transform.position += getForward() * Time.deltaTime * 15f;
+                //transform.GetComponent<Rigidbody>().AddForce(getForward() * 2000f);
+
+                if (!isLevel)
+                {
+                    if(initialRotation == Quaternion.identity) initialRotation = transform.rotation;
+                    if(levelRotation == Quaternion.identity) levelRotation = initialRotation * Quaternion.Euler(-15 * Vector3.forward);
+
+                    transform.rotation = Quaternion.Lerp(transform.rotation, levelRotation, Time.deltaTime * 12f);
+                    transform.position += getForward() * Time.deltaTime * 12f;
+                }
+                
+                if (Quaternion.Angle(transform.rotation, levelRotation) <= 1.2f)
+                {
+                    //Debug.Log("level rotation reached");
+                    isLevel = true;
+                    initialRotation = Quaternion.identity;
+                    levelRotation = Quaternion.identity;
+                }
+
+                if (isLevel)
+                {
+                    // we've reached the right rotation so we can be airborne
+                    transform.GetComponent<Rigidbody>().useGravity = false;
+                    transform.position += getForward() * Time.deltaTime * 15f;
+                }
+            }
+            else
+            {
+                transform.GetComponent<Rigidbody>().useGravity = true;
+                isLevel = false;
+                initialRotation = Quaternion.identity;
+                levelRotation = Quaternion.identity;
             }
 
             if (Input.GetKey(KeyCode.E))
             {
                 // rotate right
                 // TODO: need to check altitude before allowing
-                transform.Rotate(new Vector3(-1, 0, 0) * 15 * Time.deltaTime);
+                transform.Rotate(new Vector3(-1, 0, 0) * 20 * Time.deltaTime);
             }
 
             if (Input.GetKey(KeyCode.Q))
             {
                 // rotate left
                 // TODO: need to check altitude before allowing
-                transform.Rotate(new Vector3(1, 0, 0) * 15 * Time.deltaTime);
+                transform.Rotate(new Vector3(1, 0, 0) * 20 * Time.deltaTime);
             }
 
             if (Input.GetKey(KeyCode.A))
@@ -94,28 +132,14 @@ public class BiplaneController : MonoBehaviour
                 transform.Rotate(new Vector3(0, 0, -1) * 25 * Time.deltaTime);
             }
 
-            propeller.transform.Rotate(new Vector3(0, 0, 1) * 500f);
+            propeller.transform.Rotate(new Vector3(0, 0, 1) * 1000f);
         }
     }
 
     public Vector3 getForward()
     {
-        //Vector3 forward = Vector3.Cross(Vector3.up, transform.right);
-        //forward.Normalize(); // make unit vector
-
-        // in this case our biplane's right vector is actually pointing left so we can rotate
-        // check with:
-        /*
-        Debug.DrawRay(transform.position, getForward(), Color.red);
-        Debug.DrawRay(transform.position, transform.up, Color.blue);
-        Debug.DrawRay(transform.position, transform.right, Color.green);
-        
-        or let's just use the right vector since it's pointing 'forward' 
-        */
-
-        //return Quaternion.Euler(new Vector3(0, 90, 0))  * - forward;
-
-        return Quaternion.Euler(new Vector3(-10, 0, 0)) * transform.right;
+        //return Quaternion.Euler(new Vector3(-10, 0, 0)) * transform.right;
+        return transform.right;
     }
 
     private void OnTriggerStay(Collider other)

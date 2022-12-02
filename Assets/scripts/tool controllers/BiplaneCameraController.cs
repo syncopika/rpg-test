@@ -28,11 +28,11 @@ public class BiplaneCameraController : MonoBehaviour
         // change camera view
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            transform.position = Vector3.Lerp(transform.position, targetPos + biplaneForward * 7.2f, 5f * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetPos + biplaneForward * 30f, 5f * Time.deltaTime);
         }
         else
         {
-            transform.position = Vector3.Lerp(transform.position, targetPos - biplaneForward * 15f, 5f * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetPos - biplaneForward * 20f, 5f * Time.deltaTime);
         }
 
         transform.rotation = Quaternion.Lerp(transform.rotation, toFollow.transform.rotation, 5f * Time.deltaTime);
