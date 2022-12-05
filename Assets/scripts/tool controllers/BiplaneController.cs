@@ -31,9 +31,8 @@ public class BiplaneController : MonoBehaviour
             if (Input.GetKeyUp("r"))
             {
                 // get in plane
-                // disable player controller
-                //Debug.Log("get in plane");
                 player.GetComponent<Player>().enabled = false;
+                player.SetActive(false);
                 isFlying = true;
                 cam.GetComponent<BiplaneCameraController>().enabled = true;
                 cam.GetComponent<PlayerCamera>().enabled = false;
@@ -43,13 +42,12 @@ public class BiplaneController : MonoBehaviour
         {
             if (Input.GetKeyUp("r"))
             {
-                //Debug.Log("get out of plane");
                 // get out of plane
-
                 transform.GetComponent<Rigidbody>().useGravity = true;
 
                 // enable player controller
                 player.GetComponent<Player>().enabled = true;
+                player.SetActive(true);
                 isFlying = false;
 
                 // TODO: where to place player?
