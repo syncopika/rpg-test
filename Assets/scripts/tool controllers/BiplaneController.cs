@@ -15,10 +15,12 @@ public class BiplaneController : MonoBehaviour
     public GameObject propeller;
     public GameObject player;
     public Camera cam;
+    public GameObject text; // for displaying instructions or whatever e.g. "press r to fly plane"
 
     // Start is called before the first frame update
     void Start()
     {
+        text.SetActive(false);
     }
 
     // Update is called once per frame
@@ -28,11 +30,21 @@ public class BiplaneController : MonoBehaviour
 
         if (playerInRange && !isFlying)
         {
+            // rotate text
+            //text.transform.Rotate(new Vector3(0, 1, 0) * Time.deltaTime * 25f);
+
+            // have text face player
+            // https://answers.unity.com/questions/32259/why-my-instantiated-3d-text-is-flipped.html
+            // https://stackoverflow.com/questions/59020039/transform-lookat-on-3d-text-is-showing-the-text-backwards
+            text.transform.LookAt(player.transform.position);
+            text.transform.Rotate(new Vector3(0, 180, 0));
+
             if (Input.GetKeyUp("r"))
             {
                 // get in plane
                 player.GetComponent<Player>().enabled = false;
                 player.SetActive(false);
+                text.SetActive(false);
                 isFlying = true;
                 cam.GetComponent<BiplaneCameraController>().enabled = true;
                 cam.GetComponent<PlayerCamera>().enabled = false;
@@ -146,11 +158,15 @@ public class BiplaneController : MonoBehaviour
         {
             propeller.transform.Rotate(new Vector3(0, 0, 1) * 500f);
             playerInRange = true;
+
+            // display text
+            text.SetActive(true);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         playerInRange = false;
+        text.SetActive(false);
     }
 }
