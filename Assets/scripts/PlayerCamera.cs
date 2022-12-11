@@ -20,11 +20,6 @@ public class PlayerCamera : MonoBehaviour
 
     private Quaternion rotationBoneRotation; // use this to keep track of current rotation to set to (e.g. when aiming in a certain direction) since we manually change the rotation to override changes from animation
 
-    //float distFromCamera = 8.2f;
-    //Vector3 cameraPosCorrection = Vector3.zero;
-    //string playerCharacterModelIdentifier = "human";
-    //bool rotationChanged = false;
-
     public void toggleFirstPerson()
     {
         inFirstPerson = !inFirstPerson;
@@ -88,97 +83,6 @@ public class PlayerCamera : MonoBehaviour
             }
         }
     }
-
-    /* not actually needed anymore but leaving here just in case :)
-    Vector3 getNewCameraPos()
-    {
-        Vector3 playerPos = new Vector3(
-            player.transform.position.x, transform.position.y, player.transform.position.z
-        );
-
-        Vector3 playerForward = player.GetComponent<Player>().getForward();
-        Vector3 newVec = distFromCamera * playerForward;
-        newVec.y = -5f;
-
-        if (cameraPosCorrection != Vector3.zero) // if camera needs correction
-        {
-            // if we're trying to figure out the pos of camera due to obstruction
-            RaycastHit hit;
-            if (Physics.Linecast(transform.position, playerPos, out hit))
-            {
-                if (hit.transform && !hit.transform.name.Contains(playerCharacterModelIdentifier))
-                {
-                    //Debug.Log("trying to correct cam distance");
-                    // keep correcting the camera pos until no more boundary obstruction
-                    cameraPosCorrection += (playerForward * 0.1f);
-
-                    return cameraPosCorrection;
-                }
-            }
-
-            // no more obstruction! yay
-            //Debug.Log("no more obstruction");
-            cameraPosCorrection = Vector3.zero;
-
-            return transform.position; // return current pos
-
-        }
-        else
-        {
-            // TODO: the camera still moves out of bounds sometimes
-            // e.g. when rotating when player is at a boundary
-            // sometimes when player is at a boundary and steps back far enough, the camera bounces to try to correct but never resolves
-
-            // check if current cam position is OK or needs to be corrected
-            // recalculate every time rotation changes? e.g. if rotation changes, set cameraPosCorrection to newDesiredPos
-            Vector3 newDesiredPos = player.transform.position - newVec;
-
-            if (rotationChanged)
-            {
-                cameraPosCorrection = newDesiredPos;
-                rotationChanged = false;
-                //Debug.Log("rotation changed");
-                return cameraPosCorrection;
-            }
-
-            // if we can get to newDesiredPos, then let's do that
-            RaycastHit hit;
-            if (Physics.Linecast(newDesiredPos, playerPos, out hit) && hit.transform.name.Contains(playerCharacterModelIdentifier))
-            {
-                // no obstructions, desired pos OK
-                //Debug.Log("no obstructions found");
-                cameraPosCorrection = Vector3.zero;
-                return newDesiredPos;
-            }
-            else if (Physics.Linecast(newDesiredPos, playerPos, out hit) && !hit.transform.name.Contains(playerCharacterModelIdentifier))
-            {
-                // use hit.transform.position as a starting point but make sure the y axis value matches the camera
-                Vector3 startPos = new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z);
-                cameraPosCorrection = startPos; // start at obstruction pos and correct pos as needed
-                return cameraPosCorrection;
-            }
-            else if (Physics.Linecast(transform.position, playerPos, out hit) && hit.transform.name.Contains(playerCharacterModelIdentifier))
-            {
-                // no obstruction from current cam pos to the player - we've reached a satisfactory distance.
-                // stop correcting camera pos
-                cameraPosCorrection = Vector3.zero;
-                return transform.position;
-            }
-            else if (Physics.Linecast(transform.position, playerPos, out hit) && !hit.transform.name.Contains(playerCharacterModelIdentifier))
-            {
-                //Debug.Log("obstruction found");
-                Vector3 startPos = new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z);
-                cameraPosCorrection = startPos;
-                return cameraPosCorrection;
-            }
-            else
-            {
-                cameraPosCorrection = Vector3.zero;
-                return transform.position;
-            }
-        }
-    }
-    */
 
     // Start is called before the first frame update
     void Start()
