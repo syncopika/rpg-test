@@ -76,9 +76,15 @@ public class PlayerCamera : MonoBehaviour
                 }
                 else if (hit.transform.name.Contains("book-animated"))
                 {
-                    // opening/closing a book
+                    // opening/closing a book (cottage interior scene)
                     Animator bookAnimator = hit.transform.GetComponent<Animator>();
                     bookAnimator.SetBool("isOpen", !bookAnimator.GetBool("isOpen"));
+                }
+                else if (hit.transform.name.Contains("topBox"))
+                {
+                    // opening/closing a box (cottage interior scene)
+                    Animator boxAnimator = hit.transform.GetComponent<Animator>();
+                    boxAnimator.SetBool("isOpen", !boxAnimator.GetBool("isOpen"));
                 }
             }
         }
