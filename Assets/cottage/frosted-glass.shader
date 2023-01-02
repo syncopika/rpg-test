@@ -1,4 +1,5 @@
 ﻿// adapted from: https://www.shadertoy.com/view/WdSGz1
+// TODO: check out this one as well: https://github.com/andydbc/unity-frosted-glass/blob/master/Assets/FrostedGlass/Shaders/FrostedGlass.shader
 
 Shader "Unlit/frosted-glass"
 {
