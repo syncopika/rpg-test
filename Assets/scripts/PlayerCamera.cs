@@ -74,6 +74,10 @@ public class PlayerCamera : MonoBehaviour
                 {
                     gm.exitCottage();
                 }
+                else if (hit.transform.name.Contains("EnterTavern"))
+                {
+                    Debug.Log("TODO: enter tavern");
+                }
                 else if (hit.transform.name.Contains("book-animated"))
                 {
                     // opening/closing a book (cottage interior scene)
