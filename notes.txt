@@ -53,10 +53,9 @@ stuff with tools (need to equip first)
 
 TODO:
 - add basic cottage interior scene
-  - have a fireplace (particle system)
   - table, chairs, kitchenware
   - kitchen
-  - books, bookshelf
+  - more books
   - bed
   - desk
   - be able to eat food
@@ -65,8 +64,6 @@ TODO:
 - finish fishing
   - so far have the basic logic in place - fish sees floater, "bites" floater, got the fishing line changing upon bite
   - next: some randomization for if the fish decides to bite, what to do when a bite occurs (e.g. catching, failing to catch?)
-
-- maybe a basic inventory menu
 
 - flesh out gardening/planting seeds, growing them? watering them?
 

@@ -49,10 +49,17 @@ public class DialogUIController : MonoBehaviour
 
         // TODO: maybe pass another arg to indicate what to do if yes button is pressed?
         if (state == 0)
+        {
             clickYesToEnterCottage();
-
-        if (state == 1)
+        }
+        else if (state == 1)
+        {
             clickYesToEnterWorldMap();
+        }
+        else if (state == 2)
+        {
+            clickYesToEnterTavern();
+        }
     }
 
     public void updateStatusTemporarily(int expiryTime, string newStatus)
@@ -85,6 +92,11 @@ public class DialogUIController : MonoBehaviour
         yesButton.onClick.AddListener(enterCottage);
     }
 
+    void clickYesToEnterTavern()
+    {
+        yesButton.onClick.AddListener(enterTavern);
+    }
+
     void clickYesToEnterWorldMap()
     {
         yesButton.onClick.AddListener(enterWorld);
@@ -96,6 +108,14 @@ public class DialogUIController : MonoBehaviour
         clearStatus();
         gameManager.crosshairs.enabled = false; // turn off crosshairs before changing scene b/c atm, the player defaults to 3rd person on scene load
         SceneManager.LoadScene("cottage-interior");
+    }
+
+    void enterTavern()
+    {
+        hideButtons();
+        clearStatus();
+        gameManager.crosshairs.enabled = false; // turn off crosshairs before changing scene b/c atm, the player defaults to 3rd person on scene load
+        SceneManager.LoadScene("tavern-interior");
     }
 
     void enterWorld()

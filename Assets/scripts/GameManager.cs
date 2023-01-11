@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public Canvas dialogUI; // show buttons fr entering/exiting scenes
+    public Canvas dialogUI; // show buttons for entering/exiting scenes
     public Canvas inventoryUI;
     public Canvas crosshairs;
     public Canvas controlUI;
@@ -25,6 +25,17 @@ public class GameManager : MonoBehaviour
     {
         dialogUI.enabled = true;
         dialogUiController.updateStatusWithButtons("exit cottage?", 1);
+    }
+
+    public void enterTavern()
+    {
+        dialogUI.enabled = true;
+        dialogUiController.updateStatusWithButtons("enter tavern?", 2);
+    }
+    public void exitTavern()
+    {
+        dialogUI.enabled = true;
+        dialogUiController.updateStatusWithButtons("exit tavern?", 1);
     }
 
     // Start is called before the first frame update

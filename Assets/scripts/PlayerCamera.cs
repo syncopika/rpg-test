@@ -76,7 +76,11 @@ public class PlayerCamera : MonoBehaviour
                 }
                 else if (hit.transform.name.Contains("EnterTavern"))
                 {
-                    Debug.Log("TODO: enter tavern");
+                    gm.enterTavern();
+                }
+                else if (hit.transform.name.Contains("ExitTavern"))
+                {
+                    gm.exitTavern();
                 }
                 else if (hit.transform.name.Contains("book-animated"))
                 {
