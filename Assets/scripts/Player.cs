@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // kinematic, non-physics
 public class Player : MonoBehaviour
@@ -18,6 +19,9 @@ public class Player : MonoBehaviour
     // for detecting distance between player model and terrain/ground
     public GameObject baselineObj;
 
+    // for any instruction text
+    public GameObject text; 
+
     private InventoryManager inventory;
 
     private bool isInFirstPerson;
@@ -25,6 +29,11 @@ public class Player : MonoBehaviour
     public InventoryManager getInventory()
     {
         return inventory;
+    }
+
+    public void setText(string text)
+    {
+        this.text.GetComponent<TextMesh>().text = text;
     }
 
     public Vector3 getForward()
@@ -214,11 +223,6 @@ public class Player : MonoBehaviour
         {
             // allow root motion for jumping? https://answers.unity.com/questions/766225/turn-off-root-motion-for-a-specific-animation.html
             anim.SetTrigger("jump");
-        }
-
-        if (anim.GetBool("isFishing"))
-        {
-            // TODO: get fish
         }
 
         if (anim.GetBool("isArmed") && Input.GetMouseButtonDown(0))

@@ -68,9 +68,9 @@ public class FishController : MonoBehaviour
         movingTowardsTarget = false;
     }
 
-    void isCaught()
+    public void isCaught()
     {
-        // TODO
+        Destroy(gameObject);
     }
 
     // Start is called before the first frame update

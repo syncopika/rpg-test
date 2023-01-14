@@ -13,6 +13,8 @@ public class FishingPoleController : MonoBehaviour
 
     LineRenderer fishingLine;
 
+    Transform owner; // e.g. the player
+
     public void toggleFishingLine()
     {
         fishingLine.enabled = !fishingLine.enabled;
@@ -27,6 +29,8 @@ public class FishingPoleController : MonoBehaviour
     {
         floater.position = floaterPositionOnBite;
         fishingLine.enabled = false;
+
+        if(owner) owner.GetComponent<Player>().setText("");
 
         if (hasBite)
         {
@@ -49,6 +53,11 @@ public class FishingPoleController : MonoBehaviour
         floaterPositionOnBite = floater.position;
     }
 
+    public void setOwner(Transform owner)
+    {
+        this.owner = owner;
+    }
+
     void Start()
     {
         fishingLine = transform.GetComponent<LineRenderer>();
@@ -62,6 +71,27 @@ public class FishingPoleController : MonoBehaviour
         {
             float oscillationSpeed = 8.0f;
             transform.GetComponent<RopeControllerRealisticNoSpring>().setFloaterPos(new Vector3(floater.position.x, floaterPositionOnBite.y + 2.0f*Mathf.Cos(oscillationSpeed * Time.time), floater.position.z));
+            owner.GetComponent<Player>().setText("press space to catch fish");
+
+            // catch on spacebar press
+            // TODO: make a more complex fishing system?
+            if (Input.GetKeyUp("space"))
+            {
+                Debug.Log("fish caught");
+                hasBite = false;
+                hookedFish.GetComponent<FishController>().isCaught();
+
+                if (owner.name.Contains("low-poly-human-edit-rig2-edit"))
+                {
+                    owner.GetComponent<Player>().getInventory().addToInventory("fish", hookedFish.gameObject);
+                    Debug.Log(owner.GetComponent<Player>().getInventory().getCurrentInventory());
+                    owner.GetComponent<Player>().setText("");
+
+                    // adjust line renderer so it's not oscillating anymore
+                    transform.GetComponent<RopeControllerRealisticNoSpring>().setFloaterPos(new Vector3(floater.position.x, floater.position.y, floater.position.z));
+                    transform.GetComponent<RopeControllerRealisticNoSpring>().toggleHasBite();
+                }
+            }
         }
     }
 

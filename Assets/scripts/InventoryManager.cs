@@ -34,6 +34,11 @@ public class InventoryManager : MonoBehaviour
         return inventory.Keys.ToList();
     }
 
+    public void addToInventory(string itemName, GameObject item)
+    {
+        inventory.Add(itemName, item);
+    }
+
     public GameObject equip(string obj)
     {
         // if currentlyEquippedName == obj, de-equip it
@@ -67,6 +72,8 @@ public class InventoryManager : MonoBehaviour
         inventory["shovel"] = shovel;
         inventory["rake"] = rake;
         inventory["wateringCan"] = wateringCan;
+
+        fishingPole.GetComponent<FishingPoleController>().setOwner(transform);
     }
 
     void Update()
