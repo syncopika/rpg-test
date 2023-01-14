@@ -13,7 +13,19 @@ public class GameManager : MonoBehaviour
     private DialogUIController dialogUiController;
     private InventoryUIController inventoryUiController;
 
+    private Vector3 lastPlayerPosition = Vector3.zero;
+
     static GameManager gmInstance;
+
+    public void setLastPlayerPos(Vector3 pos)
+    {
+        lastPlayerPosition = pos;
+    }
+
+    public Vector3 getLastPlayerPos()
+    {
+        return lastPlayerPosition;
+    }
 
     public void enterCottage()
     {

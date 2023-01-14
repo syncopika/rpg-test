@@ -106,6 +106,11 @@ public class DialogUIController : MonoBehaviour
     {
         hideButtons();
         clearStatus();
+
+        // save player position in the world
+        GameObject player = GameObject.Find("low-poly-human-edit-rig2-edit");
+        gameManager.setLastPlayerPos(player.transform.position);
+
         gameManager.crosshairs.enabled = false; // turn off crosshairs before changing scene b/c atm, the player defaults to 3rd person on scene load
         SceneManager.LoadScene("cottage-interior");
     }
@@ -114,6 +119,11 @@ public class DialogUIController : MonoBehaviour
     {
         hideButtons();
         clearStatus();
+
+        // save player position in the world
+        GameObject player = GameObject.Find("low-poly-human-edit-rig2-edit");
+        gameManager.setLastPlayerPos(player.transform.position);
+
         gameManager.crosshairs.enabled = false; // turn off crosshairs before changing scene b/c atm, the player defaults to 3rd person on scene load
         SceneManager.LoadScene("tavern-interior");
     }
