@@ -15,10 +15,10 @@ public class SunController : MonoBehaviour
     public Color nighttimeSkyColor = new Color(0.04f, 0.19f, 0.27f);
 
     // TODO: play around with these values
-    public const float daytimeRLSeconds = 10.0f * 60;
-    public const float duskRLSeconds = 1.5f * 60;
-    public const float nighttimeRLSeconds = 7.0f * 60;
-    public const float sunsetRLSeconds = 1.5f * 60;
+    public const float daytimeRLSeconds = 10.0f * 60 / 3;
+    public const float duskRLSeconds = 1.5f * 60 / 3;
+    public const float nighttimeRLSeconds = 7.0f * 60 / 3;
+    public const float sunsetRLSeconds = 1.5f * 60 / 3;
     public const float gameDayRLSeconds = daytimeRLSeconds + duskRLSeconds + nighttimeRLSeconds + sunsetRLSeconds;
 
     public const float startOfDaytime = 0;
