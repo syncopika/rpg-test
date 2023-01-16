@@ -21,10 +21,11 @@ public class LampController : MonoBehaviour
         // get time. if dark, turn on light and particle system
         float timeOfDay = sun.GetComponent<SunController>().timeOfDay;
         float startOfSunset = SunController.startOfSunset;
+        float startOfDusk = SunController.startOfDusk;
         float startOfNighttime = SunController.startOfNighttime;
 
-        //Debug.Log("startOfSunset: " + startOfSunset + ", startOfNighttime: " + startOfNighttime);
-        if (timeOfDay <= startOfSunset && timeOfDay >= startOfNighttime)
+        //Debug.Log("startOfSunset: " + startOfSunset + ", startOfNighttime: " + startOfNighttime + ", startOfDusk: " + startOfDusk);
+        if (timeOfDay <= startOfSunset && timeOfDay >= startOfDusk)
         {
             ps.Play();
             lamplight.enabled = true;
