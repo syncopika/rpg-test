@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public Canvas inventoryUI;
     public Canvas crosshairs;
     public Canvas controlUI;
+    public Canvas dialog; // for interacting with npcs
 
     private DialogUIController dialogUiController;
     private InventoryUIController inventoryUiController;
