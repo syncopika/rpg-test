@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class Dialog : MonoBehaviour
 {
@@ -32,11 +33,20 @@ public class Dialog : MonoBehaviour
         theText.enabled = true;
     }
 
+    public void setYesButton(UnityAction action)
+    {
+        yesButton.onClick.AddListener(action);
+    }
+
+    public void setNoButton(UnityAction action)
+    {
+        noButton.onClick.AddListener(action);
+    }
+
     public void updateDialog(string dialog, bool hideButtons=false)
     {
         theText.text = dialog;
 
-        // TODO: set up yes and no buttons' callbacks
         showCanvas();
 
         if (hideButtons)
@@ -46,6 +56,8 @@ public class Dialog : MonoBehaviour
     public void hideDialog()
     {
         hideCanvas();
+        yesButton.onClick.RemoveAllListeners();
+        noButton.onClick.RemoveAllListeners();
     }
 
     // Start is called before the first frame update
