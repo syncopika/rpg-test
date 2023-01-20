@@ -42,6 +42,11 @@ public class PlayerCamera : MonoBehaviour
         inThirdPersonFront = false;
     }
 
+    public bool isInFirstPerson()
+    {
+        return inFirstPerson;
+    }
+
     public void toggleInThirdPersonFront()
     {
         inThirdPersonFront = !inThirdPersonFront;

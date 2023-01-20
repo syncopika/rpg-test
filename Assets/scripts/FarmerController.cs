@@ -41,12 +41,21 @@ public class FarmerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        gameManager.dialog.GetComponent<Dialog>().updateDialog("howdy there young feller, would you care to help me out with some farming?", false);
+        if (other.transform.name.Contains("low-poly-human"))
+        {
+            if (Camera.main.transform.GetComponent<PlayerCamera>().isInFirstPerson())
+            {
+                // first-person so unlock cursor so player can click on buttons
+                Cursor.lockState = CursorLockMode.None;
+            }
 
-        yesAction = acceptQuest;
-        noAction = declineQuest;
-        gameManager.dialog.GetComponent<Dialog>().setYesButton(yesAction);
-        gameManager.dialog.GetComponent<Dialog>().setNoButton(noAction);
+            gameManager.dialog.GetComponent<Dialog>().updateDialog("howdy there young feller, would you care to help me out with some farming?", false);
+
+            yesAction = acceptQuest;
+            noAction = declineQuest;
+            gameManager.dialog.GetComponent<Dialog>().setYesButton(yesAction);
+            gameManager.dialog.GetComponent<Dialog>().setNoButton(noAction);
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -63,6 +72,12 @@ public class FarmerController : MonoBehaviour
         animator.SetBool("isIdle", false);
         transform.rotation = initialRot;
         gameManager.dialog.GetComponent<Dialog>().hideDialog();
+
+        if (Camera.main.transform.GetComponent<PlayerCamera>().isInFirstPerson())
+        {
+            // first-person so lock cursor again
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     // Update is called once per frame
