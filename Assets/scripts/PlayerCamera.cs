@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -41,6 +42,11 @@ public class PlayerCamera : MonoBehaviour
         inThirdPersonFront = false;
     }
 
+    public bool isInFirstPerson()
+    {
+        return inFirstPerson;
+    }
+
     public void toggleInThirdPersonFront()
     {
         inThirdPersonFront = !inThirdPersonFront;
@@ -74,6 +80,14 @@ public class PlayerCamera : MonoBehaviour
                 {
                     gm.exitCottage();
                 }
+                else if (hit.transform.name.Contains("EnterTavern"))
+                {
+                    gm.enterTavern();
+                }
+                else if (hit.transform.name.Contains("ExitTavern"))
+                {
+                    gm.exitTavern();
+                }
                 else if (hit.transform.name.Contains("book-animated"))
                 {
                     // opening/closing a book (cottage interior scene)
@@ -93,6 +107,16 @@ public class PlayerCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // get the gamemanager when coming back to this scene.
+        gameManager = GameObject.Find("GameManager");
+
+        // place player at the position they were at in the world scene previously, if coming from a different scene to world
+        if (SceneManager.GetActiveScene().name.Equals("main"))
+        {
+            if(gameManager.GetComponent<GameManager>().getLastPlayerPos() != Vector3.zero)
+                player.transform.position = gameManager.GetComponent<GameManager>().getLastPlayerPos();
+        }
+
         inFirstPerson = false;
         inThirdPersonFront = false;
 
@@ -106,9 +130,6 @@ public class PlayerCamera : MonoBehaviour
         Vector3 rot = transform.localRotation.eulerAngles;
         rotY = rot.y;
         rotX = rot.x;
-
-        // get the gamemanager when coming back to this scene.
-        gameManager = GameObject.Find("GameManager");
     }
 
     // Update is called once per frame

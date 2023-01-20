@@ -6,7 +6,8 @@ using UnityEngine;
 public class BiplaneController : MonoBehaviour
 {
     bool playerInRange = false;
-    bool isFlying = false;
+    bool isFlying = false; // if player in plane
+    bool isAirborne = false;
     bool isLevel = false;
 
     Quaternion initialRotation = Quaternion.identity;
@@ -73,14 +74,17 @@ public class BiplaneController : MonoBehaviour
 
                 if (!isLevel)
                 {
-                    if(initialRotation == Quaternion.identity) initialRotation = transform.rotation;
-                    if(levelRotation == Quaternion.identity) levelRotation = initialRotation * Quaternion.Euler(-15 * Vector3.forward);
+                    if(initialRotation == Quaternion.identity) 
+                        initialRotation = transform.rotation;
+                    
+                    if(levelRotation == Quaternion.identity) 
+                        levelRotation = initialRotation * Quaternion.Euler(-15 * Vector3.forward);
 
                     transform.rotation = Quaternion.Lerp(transform.rotation, levelRotation, Time.deltaTime * 12f);
                     transform.position += getForward() * Time.deltaTime * 12f;
                 }
                 
-                if (Quaternion.Angle(transform.rotation, levelRotation) <= 1.2f)
+                if (!isLevel && Quaternion.Angle(transform.rotation, levelRotation) <= 1.2f)
                 {
                     //Debug.Log("level rotation reached");
                     isLevel = true;
@@ -91,6 +95,8 @@ public class BiplaneController : MonoBehaviour
                 if (isLevel)
                 {
                     // we've reached the right rotation so we can be airborne
+                    //Debug.Log("going airborne");
+                    isAirborne = true;
                     transform.GetComponent<Rigidbody>().useGravity = false;
                     transform.position += getForward() * Time.deltaTime * 15f;
                 }
@@ -99,34 +105,35 @@ public class BiplaneController : MonoBehaviour
             {
                 transform.GetComponent<Rigidbody>().useGravity = true;
                 isLevel = false;
+                isAirborne = false;
                 initialRotation = Quaternion.identity;
                 levelRotation = Quaternion.identity;
             }
 
-            if (Input.GetKey(KeyCode.E))
+            if (isAirborne && Input.GetKey(KeyCode.E))
             {
                 // rotate right
-                // TODO: need to check altitude before allowing
-                transform.Rotate(new Vector3(-1, 0, 0) * 20 * Time.deltaTime);
+                // TODO: need to check altitude before allowing?
+                transform.Rotate(new Vector3(-1, 0, 0) * 40 * Time.deltaTime);
             }
 
-            if (Input.GetKey(KeyCode.Q))
+            if (isAirborne && Input.GetKey(KeyCode.Q))
             {
                 // rotate left
-                // TODO: need to check altitude before allowing
-                transform.Rotate(new Vector3(1, 0, 0) * 20 * Time.deltaTime);
+                // TODO: need to check altitude before allowing?
+                transform.Rotate(new Vector3(1, 0, 0) * 40 * Time.deltaTime);
             }
 
             if (Input.GetKey(KeyCode.A))
             {
                 // move left
-                transform.Rotate(new Vector3(0, -1, 0) * 15 * Time.deltaTime);
+                transform.Rotate(new Vector3(0, -1, 0) * 25 * Time.deltaTime);
             }
 
             if (Input.GetKey(KeyCode.D))
             {
                 // move right
-                transform.Rotate(new Vector3(0, 1, 0) * 15 * Time.deltaTime);
+                transform.Rotate(new Vector3(0, 1, 0) * 25 * Time.deltaTime);
             }
 
             if (Input.GetKey(KeyCode.UpArrow))

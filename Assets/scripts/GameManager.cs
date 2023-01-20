@@ -5,15 +5,28 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public Canvas dialogUI; // show buttons fr entering/exiting scenes
+    public Canvas dialogUI; // show buttons for entering/exiting scenes
     public Canvas inventoryUI;
     public Canvas crosshairs;
     public Canvas controlUI;
+    public Canvas dialog; // for interacting with npcs
 
     private DialogUIController dialogUiController;
     private InventoryUIController inventoryUiController;
 
+    private Vector3 lastPlayerPosition = Vector3.zero;
+
     static GameManager gmInstance;
+
+    public void setLastPlayerPos(Vector3 pos)
+    {
+        lastPlayerPosition = pos;
+    }
+
+    public Vector3 getLastPlayerPos()
+    {
+        return lastPlayerPosition;
+    }
 
     public void enterCottage()
     {
@@ -25,6 +38,17 @@ public class GameManager : MonoBehaviour
     {
         dialogUI.enabled = true;
         dialogUiController.updateStatusWithButtons("exit cottage?", 1);
+    }
+
+    public void enterTavern()
+    {
+        dialogUI.enabled = true;
+        dialogUiController.updateStatusWithButtons("enter tavern?", 2);
+    }
+    public void exitTavern()
+    {
+        dialogUI.enabled = true;
+        dialogUiController.updateStatusWithButtons("exit tavern?", 1);
     }
 
     // Start is called before the first frame update

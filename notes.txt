@@ -53,28 +53,23 @@ stuff with tools (need to equip first)
 
 TODO:
 - add basic cottage interior scene
-  - have a fireplace (particle system)
   - table, chairs, kitchenware
   - kitchen
-  - books, bookshelf
+  - more books
   - bed
   - desk
   - be able to eat food
   - climb ladder
 
-- finish fishing
-  - so far have the basic logic in place - fish sees floater, "bites" floater, got the fishing line changing upon bite
+- more fishing
   - next: some randomization for if the fish decides to bite, what to do when a bite occurs (e.g. catching, failing to catch?)
-
-- maybe a basic inventory menu
 
 - flesh out gardening/planting seeds, growing them? watering them?
 
 - add trees, sky, clouds, better looking/expanded terrain to main map
 
 - add another cottage? more buildings. animals?
-  - add a tavern!
-    - have card game minigame inside
+  - add a card game minigame inside tavern scene
 
 - try applying animation to only certain bones for certain situations?
   - e.g. running while armed - I want the player to be able to look around while running with animation
@@ -84,3 +79,5 @@ TODO:
 - get walking on terrain working better? or change terrain?
   - one issue is walking on terrain can sometimes push the player in a different direction (b/c rigidbody physics?).
   - maybe don't use physics for walking?
+
+- preserve inventory when changing scenes?

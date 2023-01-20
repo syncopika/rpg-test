@@ -16,3 +16,12 @@ reference picture credits:
 Mallard Duck - Kitkatcrazy via https://commons.wikimedia.org/wiki/File:Mallard2.jpg
 Coelacanth - NOAA Fisheries via https://www.fisheries.noaa.gov/species/african-coelacanth#seafood
 dirt texture for tilled soil - https://www.textures.com/download/Farmland0006/41306
+deer - https://www.rawpixel.com/image/6234327/png-sticker-journal
+
+tavern interior textures:
+https://pixabay.com/images/search/wooden%20floor/
+https://pixabay.com/photos/wooden-floor-backdrop-background-1853417/
+https://architextures.org/textures/1208
+https://architextures.org/textures/785 - oak
+https://architextures.org/textures/783 - walnut
+https://architextures.org/textures/724 - charred timber

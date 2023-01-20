@@ -42,23 +42,25 @@ public class InventoryUIController : MonoBehaviour
 
         InventoryManager im = player.GetComponent<Player>().getInventory();
 
-        int xPos = -250;
-        int yPos = -80;
-        foreach(string s in im.getCurrentInventory())
+        if (im)
         {
-            Text newText = addTextToUi(s, xPos, yPos);
-
-            if (s.Equals(im.currentlyEquippedObjName()))
+            int xPos = -250;
+            int yPos = -80;
+            foreach (string s in im.getCurrentInventory())
             {
-                newText.color = Color.blue;
-                newText.fontStyle = FontStyle.Normal;
-            }
+                Text newText = addTextToUi(s, xPos, yPos);
 
-            yPos += 45;
+                if (s.Equals(im.currentlyEquippedObjName()))
+                {
+                    newText.color = Color.blue;
+                    newText.fontStyle = FontStyle.Normal;
+                }
+
+                yPos += 45;
+            }
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         canvasBackground = transform.GetComponent<Canvas>().GetComponent<Image>();
@@ -67,10 +69,18 @@ public class InventoryUIController : MonoBehaviour
         menuOpen = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (menuOpen)
+        if (player == null)
+        {
+            GameObject p = GameObject.Find("low-poly-human-edit-rig2-edit");
+            if (p)
+            {
+                player = p.transform;
+            }
+        }
+
+        if (player != null && menuOpen)
         {
             updateMenu();
         }
