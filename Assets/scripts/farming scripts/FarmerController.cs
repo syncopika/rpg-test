@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class FarmerController : MonoBehaviour
 {
     public GameManager gameManager;
+    public GameObject farm;
 
     private Quaternion initialRot;
     private Animator animator;
@@ -13,23 +14,43 @@ public class FarmerController : MonoBehaviour
     private UnityAction yesAction;
     private UnityAction noAction;
 
-    IEnumerator wait(int timeToWait)
+    private bool questCompleted = false;
+    private bool questAccepted = false;
+
+    IEnumerator completedQuestWait()
+    {
+        yield return new WaitForSeconds(3);
+        animator.SetBool("isIdle", false);
+        transform.rotation = initialRot;
+        gameManager.dialog.GetComponent<Dialog>().hideDialog();
+    }
+
+    IEnumerator waitAndHideDialog(int timeToWait)
     {
         yield return new WaitForSeconds(timeToWait);
         gameManager.dialog.GetComponent<Dialog>().hideDialog();
     }
 
+    public void completeQuest()
+    {
+        questCompleted = true;
+        Debug.Log("quest completed!");
+        gameManager.dialog.GetComponent<Dialog>().updateDialog("thanks, that's a great help!", true);
+        StartCoroutine(waitAndHideDialog(2));
+    }
+
     void acceptQuest()
     {
-        // TODO: finish
-        gameManager.dialog.GetComponent<Dialog>().updateDialog("you're a lifesaver! <instructions go here>", true);
-        StartCoroutine(wait(2));
+        questAccepted = true;
+        Debug.Log("quest accepted!");
+        gameManager.dialog.GetComponent<Dialog>().updateDialog("you're a lifesaver! can ya plant a tree right there if ya don't mind?", true);
+        StartCoroutine(waitAndHideDialog(2));
     }
 
     void declineQuest()
     {
         gameManager.dialog.GetComponent<Dialog>().updateDialog("that's a darn shame...", true);
-        StartCoroutine(wait(2)); // wait 2 sec to close dialog
+        StartCoroutine(waitAndHideDialog(2)); // wait 2 sec to close dialog
     }
 
     // Start is called before the first frame update
@@ -41,7 +62,7 @@ public class FarmerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.name.Contains("low-poly-human"))
+        if (other.transform.name.Contains("low-poly-human") && !questAccepted && !questCompleted)
         {
             if (Camera.main.transform.GetComponent<PlayerCamera>().isInFirstPerson())
             {
@@ -56,11 +77,18 @@ public class FarmerController : MonoBehaviour
             gameManager.dialog.GetComponent<Dialog>().setYesButton(yesAction);
             gameManager.dialog.GetComponent<Dialog>().setNoButton(noAction);
         }
+        else if(other.transform.name.Contains("low-poly-human") && questAccepted && questCompleted)
+        {
+            gameManager.dialog.GetComponent<Dialog>().updateDialog("howdy there young feller, thanks again for the help!", true);
+            transform.LookAt(other.transform);
+            animator.SetBool("isIdle", true);
+            StartCoroutine(completedQuestWait());
+        }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.transform.name.Contains("low-poly-human"))
+        if (other.transform.name.Contains("low-poly-human") && !questCompleted && !questAccepted)
         {
             transform.LookAt(other.transform);
             animator.SetBool("isIdle", true);

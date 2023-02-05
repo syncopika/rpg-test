@@ -275,7 +275,7 @@ public class Player : MonoBehaviour
             else if (Input.GetKeyDown("p"))
             {
                 anim.SetBool("isPlantingSeeds", true);
-                areaInsideObj.GetComponent<GardenManager>().plantTree(getForward());
+                areaInsideObj.GetComponent<BaseGardenManager>().plantTree(getForward());
             }
             else if (Input.GetKeyUp("p"))
             {

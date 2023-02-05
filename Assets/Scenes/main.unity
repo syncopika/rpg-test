@@ -2417,12 +2417,6 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 4fcc053569d816742ad4454b0e20bc36, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 520801ecef30def47847d9b74e23b9a0, type: 3}
---- !u!1 &459653256 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: 520801ecef30def47847d9b74e23b9a0,
-    type: 3}
-  m_PrefabInstance: {fileID: 459653255}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &459653257 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 520801ecef30def47847d9b74e23b9a0,
@@ -6956,7 +6950,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1277531276}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 200
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -8491,13 +8485,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1551801429}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d48858f1bc9a70e428367cfd06ffd568, type: 3}
+  m_Script: {fileID: 11500000, guid: b1b11560e9bce6247acbddc5dc65a6a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilledSoil: {fileID: 459653256}
-  treePrefab: {fileID: 100000, guid: 39a1d8470dad71c4b8bb298373d6f826, type: 3}
+  treePrefab: {fileID: 97413857}
+  farmer: {fileID: 1850790147}
 --- !u!64 &1551801431
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -14976,6 +14970,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 78363282}
+  farm: {fileID: 1551801429}
 --- !u!135 &1850790150
 SphereCollider:
   m_ObjectHideFlags: 0

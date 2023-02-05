@@ -2,31 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GardenManager : MonoBehaviour
+public class FarmerGardenManager : BaseGardenManager
 {
-    private int requiredShovelings = 1;
-    private int requiredRakings = 1;
-
-    // TODO: more variables for planting seeds
-    // growing stuff, collecting produce, etc?
-    //public Material gardenIsPrepped; // material for when garden is prepared to be used
-
-    public GameObject tilledSoil;
-
     public GameObject treePrefab;
+    public GameObject farmer;
 
-    public void shovel()
-    {
-        requiredShovelings--;
-        evaluateState();
-    }
-
-    public void rake()
-    {
-        requiredRakings--;
-        evaluateState();
-    }
-
+    private bool questCompleted = false;
     IEnumerator plantTreeCoroutine(Vector3 position)
     {
         {
@@ -39,30 +20,25 @@ public class GardenManager : MonoBehaviour
             tree.tag = "obstacle";
             MeshCollider collider = tree.AddComponent<MeshCollider>();
             collider.convex = true;
+
+            // alert the farmer that tree has been planted (and therefore quest completed)
+            if (!questCompleted)
+            {
+                questCompleted = true;
+                farmer.GetComponent<FarmerController>().completeQuest();
+            }
         }
     }
 
-    public void plantTree(Vector3 treeLocation)
+    override public void plantTree(Vector3 treeLocation)
     {
         StartCoroutine(plantTreeCoroutine(treeLocation));
-    }
-
-    private void evaluateState()
-    {
-        if(requiredShovelings <= 0 && requiredRakings <= 0)
-        {
-            // change the garden state
-            Debug.Log("changing garden state");
-
-            tilledSoil.transform.GetComponent<MeshRenderer>().enabled = true;
-        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        //Debug.Log(transform.name);
-        tilledSoil.transform.GetComponent<MeshRenderer>().enabled = false;
+        
     }
 
     // Update is called once per frame
